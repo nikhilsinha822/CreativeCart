@@ -150,12 +150,12 @@ const Navbar = () => {
           <span onClick={() => setSidebar((prev) => !prev)}>
             <GiHamburgerMenu className="text-2xl mr-3 text-gray-500 sm:hidden" />
           </span>
-          <Image src={Logo} height={50} width={150} alt="invently"/>
+          <Image src={Logo} height={35} width={160} alt="invently"/>
         </div>
         <div className="w-3/5 items-center hidden sm:flex">
           <input className="rounded-l-md border-blue-600 border-2 border-r p-2 h-full w-full outline-none" type="text" placeholder="Search" />
-          <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3">
-            <option disabled className="hidden">All Category</option>
+          <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3" defaultValue="NULL">
+            <option className="hidden" value={"NULL"}>All Category</option>
             {category.map((val) => <option key={val.id} value={val.id}>{val.name}</option>)}
           </select>
           <button className="bg-blue-600 text-white p-1 w-1/4 rounded-r-md h-full">Search</button>
