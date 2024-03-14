@@ -6,16 +6,10 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoHomeOutline } from "react-icons/io5";
-import { MdFormatListBulleted } from "react-icons/md";
-import { FaRegHeart } from "react-icons/fa";
-import { GoArchive } from "react-icons/go";
-import { CiGlobe } from "react-icons/ci";
-import { MdOutlineHeadphones } from "react-icons/md";
-import { IoDocumentOutline } from "react-icons/io5";
 import Image from "next/image";
 import profile from "../../public/profile.jpg";
 import Logo from "../../public/logo invently.png";
+import SidebarLinks from "./Navbar/SidebarLinks";
 
 const Navbar = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -105,42 +99,7 @@ const Navbar = () => {
             &nbsp;|&nbsp;
             <Link href="#">Register</Link>
           </div>
-          <div className="">
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <IoHomeOutline className="text-gray-500 mr-5 text-xl active:text-white" />
-              Home
-            </Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <MdFormatListBulleted className="text-gray-500 mr-5 text-xl active:text-white" />
-              Categories
-            </Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <FaRegHeart className="text-gray-500 mr-5 text-xl active:text-white" />
-              Favorites
-            </Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <GoArchive className="text-gray-500 mr-5 text-xl active:text-white" />
-              My Orders
-            </Link>
-          </div>
-          <hr className="border w-11/12" />
-          <div>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <CiGlobe className="text-gray-500 mr-5 text-xl active:text-white" />
-              English | USD</Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <MdOutlineHeadphones className="text-gray-500 mr-5 text-xl active:text-white" />
-              Contact Us</Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
-              <IoDocumentOutline className="text-gray-500 mr-5 text-xl active:text-white" />
-              About</Link>
-          </div>
-          <hr className="border w-11/12" />
-          <div>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">User agreement</Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">Patnership</Link>
-            <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">Privacy policy</Link>
-          </div>
+          <SidebarLinks />
         </div>
       </div>
 
