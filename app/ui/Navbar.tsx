@@ -12,7 +12,7 @@ import Logo from "../../public/logo invently.png";
 import SidebarLinks from "./Navbar/SidebarLinks";
 
 const Navbar = () => {
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState<Boolean>(false);
   const category = [
     {
       id: 1,
@@ -90,10 +90,10 @@ const Navbar = () => {
   return (
     <nav>
       {/* {Sidebar} */}
-      <div className={`absolute h-full w-full transition duration-300 ${sidebar ? "" : "-translate-x-full"}`} onClick={()=>setSidebar((prev)=>!prev)}>
+      <div className={`absolute h-full w-full transition duration-300 ${sidebar ? "" : "-translate-x-full"} z-50`} onClick={()=>setSidebar((prev)=>!prev)}>
         <div className="bg-white h-full w-10/12">
           <div className="bg-gray-200 p-6 pl-5">
-            <Image src={profile} width={50} height={50} alt="profile" className="rounded-full" />
+            <Image src={profile} width={50} height={50} alt="profile" className="rounded-full h-auto w-auto" />
             <br />
             <Link href="#">Sign In</Link>
             &nbsp;|&nbsp;
@@ -109,7 +109,7 @@ const Navbar = () => {
           <span onClick={() => setSidebar((prev) => !prev)}>
             <GiHamburgerMenu className="text-2xl mr-3 text-gray-500 sm:hidden" />
           </span>
-          <Image src={Logo} height={35} width={160} alt="invently"/>
+          <Image src={Logo} height={35} width={160} alt="invently" className="h-auto w-auto"/>
         </div>
         <div className="w-3/5 items-center hidden sm:flex">
           <input className="rounded-l-md border-blue-600 border-2 border-r p-2 h-full w-full outline-none" type="text" placeholder="Search" />

@@ -16,17 +16,17 @@ const Carousel = () => {
     "https://res.cloudinary.com/dusjaet8n/image/upload/v1710437585/50504080523294_spswf8.webp",
     "https://res.cloudinary.com/dusjaet8n/image/upload/v1710437584/50504080883742_bwmwib.webp"
   ])
-  useEffect(()=>{
-    if(scrollNeg || scrollPos) return;
+  useEffect(() => {
+    if (scrollNeg || scrollPos) return;
     const interval = setInterval(() => {
       handleNext()
     }, 3000);
     return () => clearInterval(interval);
   })
   const handlePrev = () => {
-    if(scrollNeg || scrollPos) return;
+    if (scrollNeg || scrollPos) return;
     setScrollPos(true);
-    const timeout  = setTimeout(() => {
+    const timeout = setTimeout(() => {
       let copy = imagesUrl.slice(0, imagesUrl.length - 1);
       copy.unshift(imagesUrl[imagesUrl.length - 1]);
       setImageUrl(copy);
@@ -35,9 +35,9 @@ const Carousel = () => {
     return () => clearTimeout(timeout);
   }
   const handleNext = () => {
-    if(scrollNeg || scrollPos) return;
+    if (scrollNeg || scrollPos) return;
     setScrollNeg(true);
-    const timeout  = setTimeout(() => {
+    const timeout = setTimeout(() => {
       setScrollNeg(false);
       let copy = imagesUrl.slice(1, imagesUrl.length);
       copy.push(imagesUrl[0]);
@@ -47,21 +47,23 @@ const Carousel = () => {
   }
   return (
     <div>
-      <div className='overflow-x-hidden w-screen'>
+      <div className='h-9 md:h-3'></div>
       <button className='hidden lg:block' onClick={handlePrev}>
-        <MdNavigateBefore className='text-6xl bg-gray-200 rounded-full absolute left-6 top-56 p-3 z-10' />
+        <MdNavigateBefore className='text-6xl bg-gray-200 rounded-full absolute left-6 top-64 p-3 z-10' />
       </button>
       <button className='hidden lg:block' onClick={handleNext}>
-        <MdNavigateNext className='text-6xl bg-gray-200 rounded-full absolute right-6 top-56 p-3 z-10' />
+        <MdNavigateNext className='text-6xl bg-gray-200 rounded-full absolute right-6 top-64 p-3 z-10' />
       </button>
+      <div className='overflow-x-hidden w-screen'>
         <div className={`flex items-center text-center justify-center ${(scrollNeg || scrollPos) && "transition duration-1000"} ${scrollNeg && "-translate-x-full"} ${scrollPos && "translate-x-full"}`}>
-          {imagesUrl.map((url) => {
-            return <div className='min-w-max'>
-              <Image src={url} alt="carousel" className='min-w-max w-screen h-auto' width={1240} height={400} />
+          {imagesUrl.map((url, index) => {
+            return <div key={index} className='min-w-max'>
+              <Image src={url} alt="carousel" className='h-auto w-screen md:pb-0' width={1240} height={400} />
             </div>
           })}
         </div>
       </div>
+      <div className='h-9 md:h-3'></div>
     </div>
   )
 }
