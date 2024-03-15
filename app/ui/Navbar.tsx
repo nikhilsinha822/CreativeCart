@@ -8,7 +8,7 @@ import { IoSearch } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Image from "next/image";
 import profile from "../../public/profile.jpg";
-import Logo from "../../public/logo invently.png";
+import Logo from "../../public/logo(2).png";
 import SidebarLinks from "./Navbar/SidebarLinks";
 
 const Navbar = () => {
@@ -104,16 +104,16 @@ const Navbar = () => {
       </div>
 
       {/* {Navbar} */}
-      <div className="flex justify-between item-center text-center pt-4 pb-4 border-gray-200 sm:border-b-2">
+      <div className="flex justify-between item-center text-center pt-2 pb-2 border-gray-200 sm:border-b-2">
         <div className="flex items-center pl-5">
           <span onClick={() => setSidebar((prev) => !prev)}>
             <GiHamburgerMenu className="text-2xl mr-3 text-gray-500 sm:hidden" />
           </span>
-          <Image src={Logo} height={35} width={160} alt="invently" className="h-auto w-auto"/>
+          <Image src={Logo} height={35} width={160} alt="invently" className="h-4/5 md:h-auto w-auto"/>
         </div>
-        <div className="w-3/5 items-center hidden sm:flex">
+        <div className="w-3/5 pt-2 pb-2 items-center hidden sm:flex">
           <input className="rounded-l-md border-blue-600 border-2 border-r p-2 h-full w-full outline-none" type="text" placeholder="Search" />
-          <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3" defaultValue="NULL">
+          <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3 outline-none" defaultValue="NULL">
             <option className="hidden" value={"NULL"}>All Category</option>
             {category.map((val) => <option key={val.id} value={val.id}>{val.name}</option>)}
           </select>
