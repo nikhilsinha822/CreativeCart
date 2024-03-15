@@ -1,6 +1,11 @@
+import Carosel from '../ui/Home/Carousel'
+
 const Home = () => {
   return (
-    <div>Home</div>
+    <div className='max-w-screen-lg'>
+      <Carosel />
+      Home
+    </div>
   )
 }
 
