@@ -46,24 +46,24 @@ const Carousel = () => {
     return () => clearTimeout(timeout);
   }
   return (
-    <div>
-      <div className='h-9 md:h-3'></div>
+    <div className='w-full overflow-hidden p-2 my-5 md:my-0 md:p-1 bg-gray-100'>
+      {/* <div className='h-9 md:h-3'></div> */}
       <button className='hidden lg:block' onClick={handlePrev}>
         <MdNavigateBefore className='text-6xl bg-gray-200 rounded-full absolute left-6 top-64 p-3 z-10' />
       </button>
       <button className='hidden lg:block' onClick={handleNext}>
         <MdNavigateNext className='text-6xl bg-gray-200 rounded-full absolute right-6 top-64 p-3 z-10' />
       </button>
-      <div className='overflow-x-hidden w-screen'>
+      <div className='overflow-x-hidden w-full h-auto'>
         <div className={`flex items-center text-center justify-center ${(scrollNeg || scrollPos) && "transition duration-1000"} ${scrollNeg && "-translate-x-full"} ${scrollPos && "translate-x-full"}`}>
           {imagesUrl.map((url, index) => {
-            return <div key={index} className='min-w-max'>
-              <Image src={url} alt="carousel" className='h-auto w-screen md:pb-0' width={1240} height={400} />
+            return <div key={index} className='w-full min-w-full'>
+              <Image src={url} alt="carousel" className='h-auto w-full mx-auto rounded-md md:pb-0' width={1240} height={400} />
             </div>
           })}
         </div>
       </div>
-      <div className='h-9 md:h-3'></div>
+      {/* <div className='h-9 md:h-3'></div> */}
     </div>
   )
 }

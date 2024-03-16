@@ -2,4 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+::-webkit-scrollbar {
+    /* width: 1px; Change this value to adjust the width */
+    /* background-color: ; */
+}

@@ -1,9 +1,11 @@
-import Carosel from '../ui/Home/Carousel'
+import Carousel from '../ui/Home/Carousel'
+import DealsAndOffer from '../ui/Home/DealsAndOffer'
 
 const Home = () => {
   return (
-    <div className='max-w-screen-lg'>
-      <Carosel />
+    <div className='bg-blue-50'>
+      <Carousel />
+      <DealsAndOffer />
       Home
     </div>
   )
