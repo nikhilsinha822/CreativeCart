@@ -18,6 +18,13 @@ const config: Config = {
         '3xs': '.25rem', 
       }
     },
+    keyframes: {
+      shimmer: {
+        '100%': {
+          transform: 'translateX(100%)',
+        },
+      },
+    },
   },
   plugins: [],
 };
