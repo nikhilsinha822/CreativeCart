@@ -20,7 +20,7 @@ const Login = () => {
             loginState(response.accessToken);
             redirect('/')
         }
-    }, [response.message])
+    }, [response.message, response.accessToken, loginState])
 
     return (
         <div className='flex justify-center md:mx-20 py-auto h-screen'>
@@ -46,7 +46,7 @@ const Login = () => {
                         className='border border-gray-500 p-3 rounded focus:outline-none focus:ring-1 focus:ring-black'
                     />
                     <Button>LOGIN</Button>
-                    <p className='mt-4'>Don't have an account? <Link className='text-blue-500 underline' href="/register">Register</Link></p>
+                    <p className='mt-4'>Don&apos;t have an account? <Link className='text-blue-500 underline' href="/register">Register</Link></p>
                     {response.message && response.message !== "Success" && (
                         <div className='flex items-center mt-2'>
                             <BsExclamationCircle className="text-red-500 mr-1" />

@@ -89,7 +89,7 @@ export const handleRegister = async (prevState: { message: string, token?: strin
     });
 
     if (!validatedFields.success) {
-        console.log(validatedFields.error.errors)
+        // console.log(validatedFields.error.errors)
         return { message: validatedFields.error.errors[0].message };
     }
 
@@ -128,7 +128,7 @@ export const handleRegister = async (prevState: { message: string, token?: strin
 
         return { message: "Success", accessToken: response.data.accessToken };
     } catch (error: any) {
-        console.log("error", error);
+        // console.log("error", error);
         return { message: error?.response?.data?.message || "Unknown error" }
     }
 }

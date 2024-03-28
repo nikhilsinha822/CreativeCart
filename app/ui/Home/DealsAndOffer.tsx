@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const DealsAndOffer = () => {
 
@@ -33,7 +34,7 @@ const DealsAndOffer = () => {
                 {products.map((product, index) => {
                     return <div key={index} className='flex flex-col text-center justify-center items-center border border-gray-300 min-w-fit'>
                         <div className='h-36 p-5 md:h-40 lg:h-56 flex items-center justify-center text-center'>
-                            <img className='w-7/12 lg:w-9/12 h-auto' src={product.url} alt="product" />
+                            <Image className='w-7/12 lg:w-9/12 h-auto' src={product.url} alt="product" width={1000} height={1000}/>
                         </div>
                         <div>{product.name}</div>
                         <div className='bg-red-100 text-red-600 text-sm font-bold p-1 px-3 m-3 rounded-full'>-{product.discount}</div>

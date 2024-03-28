@@ -23,7 +23,7 @@ const Register = () => {
       loginState(response.accessToken);
       redirect('/')
     }
-  }, [response.message]);
+  }, [response.message, response.accessToken, loginState]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;

@@ -1,5 +1,5 @@
 'use client'
-import { ReactNode, createContext, useEffect, useReducer } from "react";
+import { ReactNode, createContext, useEffect, useReducer, useCallback } from "react";
 import useLocalStorage from "../hook/useLocalStorage";
 import axios from 'axios'
 
@@ -48,21 +48,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [accessToken, setToken, clearToken] = useLocalStorage('accessToken', '');
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const loginState = (token: string) => {
+    const loginState = useCallback((token: string) => {
         setToken(token);
         dispatch({
             type: 'LOGIN',
             payload: token,
         })
-    }
+    },[setToken])
 
-    const logoutState = () => {
+    const logoutState = useCallback(() => {
         clearToken();
         dispatch({
             type: 'LOGOUT',
             payload: null,
         })
-    }
+    },[clearToken])
 
     useEffect(() => {
         if (accessToken) {
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             }
         }
         if (state.isAuthenticated) revalidateToken();
-    }, [state.isAuthenticated])
+    }, [state.isAuthenticated, accessToken, loginState, logoutState])
 
     return (
         <AuthContext.Provider value={{ ...state, loginState, logoutState }}>
