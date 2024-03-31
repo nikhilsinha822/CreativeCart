@@ -13,6 +13,10 @@ export type productType = {
     desc: string;
     price: number;
     stock: number;
+    rating: {
+        stars: number
+        numReviews: number
+    }
     createdBy: string;
     discountType: string;
     discountValue: number;

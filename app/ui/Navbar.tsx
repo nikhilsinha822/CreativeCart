@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link"
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { GoHeartFill } from "react-icons/go";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
@@ -10,6 +10,11 @@ import Image from "next/image";
 import profile from "../../public/profile.jpg";
 import Logo from "../../public/logo(2).png";
 import SidebarLinks from "./Navbar/SidebarLinks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+type SearchParams = {
+  category: { id: number, name: string }[]
+}
 
 const Navbar = () => {
   const [sidebar, setSidebar] = useState<Boolean>(false);
@@ -87,10 +92,11 @@ const Navbar = () => {
       name: "Software"
     }
   ];
+
   return (
     <nav>
       {/* {Sidebar} */}
-      <div className={`absolute h-full w-full transition duration-300 ${sidebar ? "" : "-translate-x-full"} z-50`} onClick={()=>setSidebar((prev)=>!prev)}>
+      <div className={`absolute h-full w-full transition duration-300 ${sidebar ? "" : "-translate-x-full"} z-50`} onClick={() => setSidebar((prev) => !prev)}>
         <div className="bg-white h-full w-10/12">
           <div className="bg-gray-200 p-6 pl-5">
             <Image src={profile} width={50} height={50} alt="profile" className="rounded-full h-auto w-auto" />
@@ -109,16 +115,15 @@ const Navbar = () => {
           <span onClick={() => setSidebar((prev) => !prev)}>
             <GiHamburgerMenu className="text-2xl mr-3 text-gray-500 sm:hidden" />
           </span>
-          <Image src={Logo} height={35} width={160} alt="invently" className="h-4/5 md:h-auto w-auto"/>
+          <Image src={Logo} height={35} width={160} alt="invently" className="h-4/5 md:h-auto w-auto" />
         </div>
-        <div className="w-3/5 pt-2 pb-2 items-center hidden sm:flex">
-          <input className="rounded-l-md border-blue-600 border-2 border-r p-2 h-full w-full outline-none" type="text" placeholder="Search" />
-          <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3 outline-none" defaultValue="NULL">
-            <option className="hidden" value={"NULL"}>All Category</option>
-            {category.map((val) => <option key={val.id} value={val.id}>{val.name}</option>)}
-          </select>
-          <button className="bg-blue-600 text-white p-1 w-1/4 rounded-r-md h-full">Search</button>
-        </div>
+
+        <Suspense>
+          <SearchBar
+            category={category}
+          />
+        </Suspense>
+
         <div className="hidden items-center text-xs text-center space-x-5 pr-8 text-gray-500 sm:flex">
           <Link href={'/profile'} className="text-center">
             <FaUser className="text-xl m-auto pb-1" />
@@ -143,15 +148,56 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* {Mobile SeacrchBar} */}
-      <div className="flex justify-center sm:hidden">
-        <input type="text" className="bg-transparent p-2 pl-9 border-2 shadow-sm w-11/12 rounded-md" placeholder="Search" />
-        <span className="bg-blue-50 p-2 border-2 shadow-sm w-11/12 rounded-md absolute -z-10 ">
-          <IoSearch className="text-2xl text-gray-400" />
-        </span>
-      </div>
+      <Suspense>
+        <MobileSearchBar/>
+      </Suspense>
     </nav>
   )
+}
+
+const SearchBar = ({ category }: SearchParams) => {
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState<string>(searchParams.get("q") || "");
+  const { replace } = useRouter();
+
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    if (query === "") return;
+    replace(`search?q=${query}`);
+  }
+
+  return <form onSubmit={handleSearch} className="w-3/5 pt-2 pb-2 items-center hidden sm:flex">
+    <input
+      className="rounded-l-md border-blue-600 border-2 border-r p-2 h-full w-full outline-none"
+      onChange={(e) => setQuery(e.target.value)} value={query} type="text" placeholder="Search" />
+    <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3 outline-none" defaultValue="NULL">
+      <option className="hidden" value={"NULL"}>All Category</option>
+      {category.map((val) => <option key={val.id} value={val.id}>{val.name}</option>)}
+    </select>
+    <button className="bg-blue-600 text-white p-1 w-1/4 rounded-r-md h-full">Search</button>
+  </form>
+}
+
+const MobileSearchBar = () => {
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState<string>(searchParams.get("q") || "");
+  const { replace } = useRouter();
+
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    if (query === "") return;
+    replace(`search?q=${query}`);
+  }
+
+  return <form onSubmit={handleSearch} className="flex justify-center sm:hidden">
+    <input
+      onChange={(e) => setQuery(e.target.value)}
+      value={query}
+      type="text" className="bg-transparent p-2 pl-9 border-2 shadow-sm w-11/12 rounded-md" placeholder="Search" />
+    <span className="bg-blue-50 p-2 border-2 shadow-sm w-11/12 rounded-md absolute -z-10 ">
+      <IoSearch className="text-2xl text-gray-400" />
+    </span>
+  </form>
 }
 
 export default Navbar

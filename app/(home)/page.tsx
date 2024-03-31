@@ -12,7 +12,7 @@ const Home = async () => {
       <div className='p-1 md:p-10'>
         <h1 className='text-2xl font-bold py-5 bg-white'>Recommended items</h1>
         <Suspense fallback={<HomeCardsSkeleton/>}>
-          <CardWrapper />
+          <CardWrapper /> 
         </Suspense>
       </div>
     </div>
