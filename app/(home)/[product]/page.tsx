@@ -3,15 +3,16 @@ import { productType } from '@/app/lib/definations'
 import ImageSection from '@/app/ui/Product/ImageSection'
 import Rating from '@/app/ui/Rating'
 import BottomButtons from '@/app/ui/Product/BottomButtons'
+import Loading from '@/app/ui/Loading'
 
 
 const page = ({ params }: { params: { product: string } }) => {
     return (
         <div>
-            <Suspense fallback={<div>Product Loading.....</div>}>
+            <Suspense fallback={<Loading/>}>
                 <Product product={params.product} />
             </Suspense>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading/>}>
                 <RelatedProducts product={params.product}/>
             </Suspense>
         </div>

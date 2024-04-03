@@ -96,7 +96,7 @@ const Navbar = () => {
   return (
     <nav>
       {/* {Sidebar} */}
-      <div className={`absolute h-full w-full transition duration-300 ${sidebar ? "" : "-translate-x-full"} z-50`} onClick={() => setSidebar((prev) => !prev)}>
+      <div className={`fixed h-full w-full transition duration-300 ${sidebar ? "" : "-translate-x-full"} z-50`} onClick={() => setSidebar((prev) => !prev)}>
         <div className="bg-white h-full w-10/12">
           <div className="bg-gray-200 p-6 pl-5">
             <Image src={profile} width={50} height={50} alt="profile" className="rounded-full h-auto w-auto" />

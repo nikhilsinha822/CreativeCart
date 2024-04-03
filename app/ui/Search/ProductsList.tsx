@@ -54,8 +54,8 @@ const ProductList = async ({ query, page }: { query: string, page: number }) => 
 
 const Product = ({ product }: { product: productType }) => {
     return (
-        <Link href={`/${product._id}`}>
-            <div className='rounded-sm border bg-white p-3 text-sm'>
+        <div className='rounded-sm border bg-white p-3 text-sm'>
+            <Link href={`/${product._id}`}>
                 <Image
                     className='m-auto h-44 md:h-56'
                     src={product.images[0].url} width={800} height={800} alt={product.title} />
@@ -67,8 +67,8 @@ const Product = ({ product }: { product: productType }) => {
                     <Rating product={product} />
                     <p className='font-lightbold w-9/12'>{product.title}</p>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     )
 }
 
