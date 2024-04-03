@@ -16,7 +16,7 @@ const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
     const searchParams = new URLSearchParams(useSearchParams());
     const pathname = usePathname();
     const createPageURL = (page: number) => {
-        page = Math.max(1, Math.min(totalPages, page));
+        page = Math.max(1, Math.min(totalPages + 1, page));
         searchParams.set('page', page.toString());
         return `${pathname}?${searchParams.toString()}`;
     }

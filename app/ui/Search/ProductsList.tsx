@@ -1,12 +1,12 @@
 // 'use client'
 import React from 'react'
 import Image from 'next/image';
+import Link from 'next/link';
 import { productType, productResponseType } from '../../lib/definations';
-import { FaStar } from "react-icons/fa";
+import Rating from '../Rating';
 import Pagination from '../Pagination';
 
 const ProductList = async ({ query, page }: { query: string, page: number }) => {
-    page = page - 1 || 0;
     const response = await fetch(`${process.env.BASE_URL}/api/v1/product?search=${query}&page=${page}&pageSize=12`)
     const productsResponse: productResponseType = await response.json();
     const products = productsResponse.data;
@@ -53,32 +53,22 @@ const ProductList = async ({ query, page }: { query: string, page: number }) => 
 }
 
 const Product = ({ product }: { product: productType }) => {
-    const rating = Math.ceil(product.rating.stars / product.rating.numReviews);
     return (
-        <div className='rounded-sm border bg-white p-3 text-sm'>
-            <Image
-                className='m-auto h-44 md:h-56'
-                src={product.images[0].url} width={800} height={800} alt={product.title} />
-            <div className='mt-2 pt-2 border-t border-gray-400'>
-                <span className='flex gap-2 items-center'>
-                    <p className='font-semibold'>Rs. {product.price - product.discountValue}</p>
-                    {product.discountValue && <p className='line-through text-gray-500 text-sm'>Rs. {product.price + product.discountValue}</p>}
-                </span>
-                <div className='flex items-center'>
-                    {
-                        [...Array(5)].map((key, index) => {
-                            return <FaStar
-                                key={index}
-                                className={`${index + 1 > rating ? "text-gray-400" : "text-yellow-400"}`}
-                            />
-                        })
-                    }
-                    <span className='font-semibold text-yellow-400 mx-1 text-sm'>{`${rating}`}</span>
-                    <span className='text-gray-400 text-xs'>{`(${product.rating.numReviews})`}</span>
+        <Link href={`/${product._id}`}>
+            <div className='rounded-sm border bg-white p-3 text-sm'>
+                <Image
+                    className='m-auto h-44 md:h-56'
+                    src={product.images[0].url} width={800} height={800} alt={product.title} />
+                <div className='mt-2 pt-2 border-t border-gray-400'>
+                    <span className='flex gap-2 items-center'>
+                        <p className='font-semibold'>Rs. {product.price - product.discountValue}</p>
+                        {product.discountValue && <p className='line-through text-gray-500 text-sm'>Rs. {product.price + product.discountValue}</p>}
+                    </span>
+                    <Rating product={product} />
+                    <p className='font-lightbold w-9/12'>{product.title}</p>
                 </div>
-                <p className='font-lightbold w-9/12'>{product.title}</p>
             </div>
-        </div>
+        </Link>
     )
 }
 
