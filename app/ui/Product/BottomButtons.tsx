@@ -1,10 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Button from '@/app/ui/Button'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/context/authContext'
-import axios, { AxiosError, AxiosResponse } from 'axios'
-// import { redirect } from 'next/navigation'
+import axios, { AxiosResponse } from 'axios'
+import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import Loader2 from '../Loader2'
 
@@ -30,6 +30,7 @@ const BottomButtons = ({ product }: { product: string }) => {
           await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart/${cartId}`, {
             cartItems: cart.cartItems
           }, { headers })
+          toast.success('Product added to cart')
         } else {
           await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart`, {
             cartItems: [{
@@ -42,7 +43,7 @@ const BottomButtons = ({ product }: { product: string }) => {
         console.log("This was unexpected. Something is Really wrong. Try again later.");
       }
     } catch (error: any) {
-      console.log(error.response.data.message);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false)
     }

@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/context/authContext'
-import { useRouter } from 'next/navigation'
+import { useRouter, redirect } from 'next/navigation'
 import Loading from '@/app/ui/Loading'
 import { cartStateType, cartItemStateType } from '@/app/lib/definations'
 import Image from 'next/image'
@@ -38,7 +38,12 @@ const CartList = async () => {
     const { token, isAuthenticated } = useContext(AuthContext);
     if (!isAuthenticated || token === null || token === ' ') {
         if (isAuthenticated !== null && token !== ' ') {
-            router.push('/login')
+            content = <>
+                <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
+                    <h1 className='text-xl'>Please login to view your cart!</h1>
+                    <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/login')}>Login</button>
+                </div>
+            </>
         }
         else {
             content = <Loading />
@@ -128,25 +133,25 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
                 <div className='flex flex-wrap justify-between h-8'>
                     <h6>Subtotal:</h6>
                     <span className='pl-2 text-green-500'>
-                        ₹{cartPriceState.subTotal}
+                        ₹{(cartPriceState.subTotal).toFixed(2)}
                     </span>
                 </div>
                 <div className='flex flex-wrap justify-between h-8'>
                     <h6>Discount:</h6>
                     <span className='pl-2 text-red-500'>
-                        - ₹{cartPriceState.totalSavings}
+                        - ₹{(cartPriceState.totalSavings).toFixed(2)}
                     </span>
                 </div>
                 <div className='flex flex-wrap justify-between h-8'>
                     <h6>Delivary:</h6>
                     <span className='pl-2 text-green-500'>
-                        ₹0<span className='line-through'>(490)</span>
+                        ₹0.00 <span className='line-through'>₹{(490).toFixed(2)}</span>
                     </span>
                 </div>
                 <hr className='border-black my-2' />
                 <div className='flex flex-wrap justify-between font-bold h-8'>
                     <h6>Total:</h6>
-                    ₹{cartPriceState.finalprice}
+                    ₹{(cartPriceState.finalprice).toFixed(2)}
                 </div>
                 <button className='bg-green-600 hover:bg-green-800 text-white rounded w-full p-2 my-2'>
                     Checkout

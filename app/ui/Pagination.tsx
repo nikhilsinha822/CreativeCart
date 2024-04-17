@@ -3,6 +3,7 @@ import React from 'react'
 import Link from 'next/link';
 import { useSearchParams, usePathname } from 'next/navigation'
 import { Suspense } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const Pagination = ({ totalPages }: { totalPages: number }) => {
@@ -50,16 +51,14 @@ const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
                     Array.from({ length: totalPages }, (v, i) => i + 1)
                         .filter((page) => page > Number(currentPage) - 2 && page < Number(currentPage) + 2)
                         .map((page) => (
-                            <>
-                                <Link
-                                    key={page}
-                                    href={createPageURL(page)}
-                                    className={`p-2 hover:bg-blue-500 hover:text-white bg-white text-blue-500 ${currentPage == page ?
-                                        'border-2 border-blue-500' :
-                                        'border-2 border-white hover:border-blue-500'}`}>
-                                    {page}
-                                </Link>
-                            </>
+                            <Link
+                                key={uuidv4()}
+                                href={createPageURL(page)}
+                                className={`p-2 hover:bg-blue-500 hover:text-white bg-white text-blue-500 ${currentPage == page ?
+                                    'border-2 border-blue-500' :
+                                    'border-2 border-white hover:border-blue-500'}`}>
+                                {page}
+                            </Link>
                         ))
                 }
                 {
