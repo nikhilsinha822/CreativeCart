@@ -14,14 +14,15 @@ const ImageSection = ({ image }: { image: Images[] }) => {
             <Image
               onClick={() => setCurrImage(img)}
               className='h-auto'
-              src={img.url} alt={img.public_id} width={400} height={400} />
+              src={img.url} alt={`img${index}`} width={400} height={400}
+              />
           </div>
         ))}
       </div>
       <div className='flex items-center justify-center'>
         <Image
         className='w-screen h-auto'
-        width={400} height={400} src={currImage.url} alt={currImage.public_id} priority />
+        width={400} height={400} src={currImage.url} alt="product" priority />
       </div>
     </div>
   )

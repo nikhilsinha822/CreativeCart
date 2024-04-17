@@ -18,7 +18,7 @@ const Card = ({ product }: { product: productType }) => {
     return <div className='bg-white p-3 rounded-sm border shadow-sm'>
         <Link href={`/${product._id}`}>
             <Image className='m-auto h-44 md:h-56' src={product.images[0].url} alt={product.title} width={1000} height={1000} />
-            <p className='font-bold text-sm pb-1 pt-3'>Rs. {product.price}</p>
+            <p className='font-bold text-sm pb-1 pt-3'>₹{product.price}</p>
             <p className='text-gray-400 text-sm'>{product.title}</p>
         </Link>
     </div >

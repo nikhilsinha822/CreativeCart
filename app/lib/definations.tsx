@@ -34,3 +34,55 @@ export type productResponseType = {
     pageSize: string;
     data: productType[];
 }
+
+export type cartItemType = {
+    product: string;
+    quantity: number;
+    variations: {
+        image: Images[],
+        size: number
+    }
+    createdAt: string;
+    _id: string;
+}
+
+export type cartDataType = {
+    _id: string;
+    cartItems: cartItemType[];
+    createdBy: string;
+    status: string;
+}
+
+export type cartResponseType = {
+    success: boolean;
+    subTotal: number;
+    totalSavings: number;
+    finalprice: number;
+    data: cartDataType[];
+}
+
+export type cartItemStateType = {
+    product: productType;
+    quantity: number;
+    variations: {
+        image: Images[];
+        size: number;
+    };
+    createdAt: string;
+    _id: string;
+}
+
+export type cartStateType = {
+    subTotal: number;
+    totalSavings: number;
+    finalprice: number;
+    data: {
+        cartItems: cartItemStateType[];
+        _id: string;
+        createdBy: string;
+        status: string;
+    };
+}
+
+
+

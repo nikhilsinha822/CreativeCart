@@ -39,13 +39,18 @@ const reducer = (state: AuthState, action: { type: string, payload: any }) => {
                 isAuthenticated: false,
                 token: null,
             }
+        case 'LOADING':
+            return {
+                isAuthenticated: null,
+                token: null,
+            }
         default:
             return state;
     }
 }
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [accessToken, setToken, clearToken] = useLocalStorage('accessToken', '');
+    const [accessToken, setToken, clearToken] = useLocalStorage('accessToken', ' ');
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const loginState = useCallback((token: string) => {

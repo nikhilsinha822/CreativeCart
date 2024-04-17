@@ -2,12 +2,12 @@ import React from 'react'
 
 const Loading = () => {
     return (
-        <div className='flex justify-center items-center text-center h-screen w-screen'>
+        <div className='flex justify-center items-center text-center h-screen w-full'>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 100 100"
                 preserveAspectRatio="xMidYMid"
-                className='bg-blue-50'
+                // className='bg-blue-50'
                 style={{
                     shapeRendering: "auto",
                     display: "block",
