@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaStar } from "react-icons/fa";
 import { productType } from '../lib/definations';
+import {v4 as uuidv4} from 'uuid'
 
 const Rating = ({ product }: { product: productType }) => {
     const rating = Math.ceil(product.rating.stars / product.rating.numReviews);
@@ -10,7 +11,7 @@ const Rating = ({ product }: { product: productType }) => {
                 {
                     [...Array(5)].map((key, index) => {
                         return <FaStar
-                            key={index}
+                            key={uuidv4()}
                             className={`${index + 1 > rating ? "text-gray-400" : "text-yellow-400"}`}
                         />
                     })

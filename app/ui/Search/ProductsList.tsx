@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { productType, productResponseType } from '../../lib/definations';
 import Rating from '../Rating';
 import Pagination from '../Pagination';
+import { v4 as uuidv4 } from 'uuid';
 
 const ProductList = async ({ query, page }: { query: string, page: number }) => {
     const response = await fetch(`${process.env.BASE_URL}/api/v1/product?search=${query}&page=${page}&pageSize=12`)
@@ -41,7 +42,7 @@ const ProductList = async ({ query, page }: { query: string, page: number }) => 
                     {
                         products.map((product) => {
                             if (!product) return null;
-                            return <Product key={product._id} product={product} />
+                            return <Product key={uuidv4()} product={product} />
                         })
                     }
                 </div>

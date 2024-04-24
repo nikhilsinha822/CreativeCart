@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { Images } from '../../lib/definations'
+import {v4 as uuidv4} from 'uuid'
 
 const ImageSection = ({ image }: { image: Images[] }) => {
   const [currImage, setCurrImage] = useState(image[0]);
@@ -10,7 +11,7 @@ const ImageSection = ({ image }: { image: Images[] }) => {
     <div className='flex'>
       <div className='flex flex-col justify-evenly mr-2 md:mx-3 md:ml-5 md:my-10'>
         {image.map((img, index) => (
-          <div key={index} className={`product-image w-16  md:w-20 h-auto hover:cursor-pointer hover:opacity-80 ${currImage === img && "border-2 border-blue-500 opacity-65 hover:opacity-65"}`}>
+          <div key={uuidv4()} className={`product-image w-16  md:w-20 h-auto hover:cursor-pointer hover:opacity-80 ${currImage === img && "border-2 border-blue-500 opacity-65 hover:opacity-65"}`}>
             <Image
               onClick={() => setCurrImage(img)}
               className='h-auto'

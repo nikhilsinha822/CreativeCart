@@ -2,13 +2,14 @@ import { getRecommendedProducts } from '../../lib/data'
 import { productType } from '@/app/lib/definations';
 import Image from 'next/image';
 import Link from 'next/link';
+import {v4 as uuid} from 'uuid';
 
 const CardWrapper = async () => {
     const { products } = await getRecommendedProducts();
     return <div className='grid grid-cols-2 gap-2 md:grid-cols-4 xl:grid-cols-5 md:gap-5'>
         {
             products.map((product: productType) => {
-                return <Card key={product._id} product={product} />
+                return <Card key={uuid()} product={product} />
             })
         }
     </div>

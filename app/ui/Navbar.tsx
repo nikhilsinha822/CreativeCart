@@ -11,6 +11,7 @@ import profile from "../../public/profile.jpg";
 import Logo from "../../public/logo(2).png";
 import SidebarLinks from "./Navbar/SidebarLinks";
 import { useSearchParams, useRouter } from "next/navigation";
+import {v4 as uuid} from 'uuid';
 
 type SearchParams = {
   category: { id: number, name: string }[]
@@ -172,7 +173,7 @@ const SearchBar = ({ category }: SearchParams) => {
       onChange={(e) => setQuery(e.target.value)} value={query} type="text" placeholder="Search" />
     <select name="" id="" className="border-blue-600 border-2 border-r-0 border-l-0 h-full w-1/3 outline-none" defaultValue="NULL">
       <option className="hidden" value={"NULL"}>All Category</option>
-      {category.map((val) => <option key={val.id} value={val.id}>{val.name}</option>)}
+      {category.map((val) => <option key={uuid()} value={val.id}>{val.name}</option>)}
     </select>
     <button className="bg-blue-600 text-white p-1 w-1/4 rounded-r-md h-full">Search</button>
   </form>

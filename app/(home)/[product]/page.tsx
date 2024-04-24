@@ -6,6 +6,7 @@ import BottomButtons from '@/app/ui/Product/BottomButtons'
 import Loading from '@/app/ui/Loading'
 import Image from 'next/image'
 import Link from 'next/link'
+import {v4 as uuid} from 'uuid'
 
 
 const page = ({ params }: { params: { product: string } }) => {
@@ -75,7 +76,7 @@ const RelatedProducts = async ({ product }: { product: string }) => {
                 <div className='grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 md:gap-5'>
                     {
                         searchProductData.map((product: productType) => {
-                            return <Card key={product._id} product={product} />
+                            return <Card key={uuid()} product={product} />
                         })
                     }
                 </div>

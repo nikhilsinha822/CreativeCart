@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import {v4 as uuid} from 'uuid'
 
 const DealsAndOffer = () => {
 
@@ -32,7 +33,7 @@ const DealsAndOffer = () => {
             </div>
             <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 md:w-11/12 m-auto overflow-hidden rounded-md py-5'>
                 {products.map((product, index) => {
-                    return <div key={index} className='flex flex-col text-center justify-center items-center border border-gray-300 min-w-fit'>
+                    return <div key={uuid()} className='flex flex-col text-center justify-center items-center border border-gray-300 min-w-fit'>
                         <div className='h-36 p-5 md:h-40 lg:h-56 flex items-center justify-center text-center'>
                             <Image className='w-7/12 lg:w-9/12 h-auto' src={product.url} alt="product" width={1000} height={1000}/>
                         </div>

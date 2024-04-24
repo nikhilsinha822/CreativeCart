@@ -14,6 +14,7 @@ import emptyCart from '@/app/assets/emptyCart.png'
 import { prepareCart } from '@/app/lib/data'
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import {v4 as uuid} from 'uuid'
 
 type cartPropsType = {
     item: cartItemStateType,
@@ -122,7 +123,7 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
                 {
                     cartItemsState.map((item, index) => {
                         return (
-                            <div key={index}>
+                            <div key={uuid()}>
                                 <Product
                                     item={item}
                                     updateCart={updateCart}
@@ -187,7 +188,6 @@ const Product = ({ item, cartItemsState, setCartItemsState, updateCart }: cartPr
             toast.success("Item removed successfully!")
         }
     }
-    console.log(productData.discountValue)
     return <div className='flex flex-col m-5 p-auto md:flex-row justify-between'>
         <div className='flex flex-row gap-4 mt-5 md:mt-0'>
             <Image src={productData.images[0].url} alt={productData.title} width={125} height={125} className='h-auto w-auto' />

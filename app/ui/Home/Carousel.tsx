@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { MdNavigateBefore } from "react-icons/md";
 import { MdNavigateNext } from "react-icons/md";
+import {v4 as uuid} from 'uuid';
 
 const Carousel = () => {
   const [scrollPos, setScrollPos] = useState<Boolean>(false)
@@ -57,7 +58,7 @@ const Carousel = () => {
       <div className='overflow-x-hidden w-full h-auto'>
         <div className={`flex items-center text-center justify-center ${(scrollNeg || scrollPos) && "transition duration-1000"} ${scrollNeg && "-translate-x-full"} ${scrollPos && "translate-x-full"}`}>
           {imagesUrl.map((url, index) => {
-            return <div key={index} className='w-full min-w-full'>
+            return <div key={uuid()} className='w-full min-w-full'>
               <Image src={url} alt="carousel" className='h-auto w-full mx-auto rounded-md md:pb-0' width={1240} height={400} />
             </div>
           })}
