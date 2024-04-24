@@ -62,7 +62,7 @@ const Product = ({ product }: { product: productType }) => {
                 <div className='mt-2 pt-2 border-t border-gray-400'>
                     <span className='flex gap-2 items-center'>
                         <p className='font-semibold'>₹{product.price - product.discountValue}</p>
-                        {product.discountValue && <p className='line-through text-gray-500 text-sm'>₹{product.price + product.discountValue}</p>}
+                        {(product.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{product.price + product.discountValue}</p>}
                     </span>
                     <Rating product={product} />
                     <p className='font-lightbold w-9/12'>{product.title}</p>

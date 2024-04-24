@@ -37,7 +37,7 @@ const Product = async ({ product }: { product: string }) => {
             <Rating product={productData} />
             <span className='flex gap-2 items-center text-xl'>
                 <p className='font-semibold'>₹{productData.price - productData.discountValue}</p>
-                {productData.discountValue && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
+                {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
             </span>
             {productData.stock > 0 ? <p className='text-green-500'>In Stock</p> : <p className='text-red-500'>Out of Stock</p>}
             <p>{productData.desc}</p>

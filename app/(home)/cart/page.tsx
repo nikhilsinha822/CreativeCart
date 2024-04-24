@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/context/authContext'
-import { useRouter, redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Loading from '@/app/ui/Loading'
 import { cartStateType, cartItemStateType } from '@/app/lib/definations'
 import Image from 'next/image'
@@ -104,6 +104,15 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
     cartItemsState.sort((a, b) => {
         return Date.parse(b.createdAt) - Date.parse(a.createdAt)
     });
+    const handleCartProceed = () => {
+        if(cartPriceState.finalprice > 500000){
+            toast.error('Cart value cannot exceed ₹500000. Please remove some items', {
+                duration: 5000
+            })
+            return
+        }
+        router.push('/checkout')
+    }
     return (
         <div className='flex flex-col md:flex-row md:p-6 bg-blue-50'>
             <div className='shadow-2xl p-4 rounded-md bg-white md:w-9/12'>
@@ -153,8 +162,10 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
                     <h6>Total:</h6>
                     ₹{(cartPriceState.finalprice).toFixed(2)}
                 </div>
-                <button className='bg-green-600 hover:bg-green-800 text-white rounded w-full p-2 my-2'>
-                    Checkout
+                <button 
+                onClick={handleCartProceed}
+                className='bg-green-600 hover:bg-green-800 text-white rounded w-full p-2 my-2'>
+                    Proceed
                 </button>
             </div>
         </div>
@@ -176,15 +187,16 @@ const Product = ({ item, cartItemsState, setCartItemsState, updateCart }: cartPr
             toast.success("Item removed successfully!")
         }
     }
-
-    return <div className='flex flex-col m-5 p-auto md:flex-row'>
+    console.log(productData.discountValue)
+    return <div className='flex flex-col m-5 p-auto md:flex-row justify-between'>
         <div className='flex flex-row gap-4 mt-5 md:mt-0'>
             <Image src={productData.images[0].url} alt={productData.title} width={125} height={125} className='h-auto w-auto' />
             <div>
                 <h1 className='font-bold text-md'>{productData.title}</h1>
                 <span className='flex gap-2 items-center text-xl'>
                     <p className='font-medium text-sm'>₹{productData.price - productData.discountValue}</p>
-                    {productData.discountValue && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
+                    {(productData.discountValue !== 0 ) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
+                    
                 </span>
                 <h1 className='text-gray-500 text-xs overflow-hidden overflow-ellipsis h-8'>{productData.desc}</h1>
             </div>
