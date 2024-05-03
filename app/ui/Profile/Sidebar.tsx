@@ -24,7 +24,7 @@ const Sidebar = ({ user }: { user: userResponseType }) => {
             return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
         });
     }
-    return <div className='h-screen sticky top-0 text-base'>
+    return <div className='md:h-screen sticky top-0 text-base'>
         <div className='flex items-center p-3 m-5 bg-white'>
             <Image src={user.avatar.url}
                 className='rounded-full w-14 h-14'
