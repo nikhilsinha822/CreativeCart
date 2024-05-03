@@ -84,5 +84,26 @@ export type cartStateType = {
     };
 }
 
+export type shippingInfoType = {
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    pinCode: number;
+    phoneNo: number;
+    _id?: string;
+}
+
+export type userResponseType = {
+    name: string,
+    email: string,
+    avatar: {
+        url: string
+        public_id: string
+    },
+    role: string[],
+    shippingInfo: shippingInfoType[]
+}
+
 
 
