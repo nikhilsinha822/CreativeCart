@@ -11,7 +11,7 @@ const SidebarLinks = () => {
     return (
         <>
             <div className="">
-                <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
+                <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="/">
                     <IoHomeOutline className="text-gray-500 mr-5 text-xl active:text-white" />
                     Home
                 </Link>
@@ -23,7 +23,7 @@ const SidebarLinks = () => {
                     <FaRegHeart className="text-gray-500 mr-5 text-xl active:text-white" />
                     Favorites
                 </Link>
-                <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="#">
+                <Link className="flex text-center items-center w-full p-5 hover:bg-blue-100" href="/orders">
                     <GoArchive className="text-gray-500 mr-5 text-xl active:text-white" />
                     My Orders
                 </Link>

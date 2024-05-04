@@ -102,9 +102,9 @@ const Navbar = () => {
           <div className="bg-gray-200 p-6 pl-5">
             <Image src={profile} width={50} height={50} alt="profile" className="rounded-full h-auto w-auto" />
             <br />
-            <Link href="#">Sign In</Link>
+            <Link href="/login">Sign In</Link>
             &nbsp;|&nbsp;
-            <Link href="#">Register</Link>
+            <Link href="/register">Register</Link>
           </div>
           <SidebarLinks />
         </div>
@@ -122,7 +122,7 @@ const Navbar = () => {
         <Suspense>
           <SearchBar
             category={category}
-          />
+          /> 
         </Suspense>
 
         <div className="hidden items-center text-xs text-center space-x-5 pr-8 text-gray-500 sm:flex">

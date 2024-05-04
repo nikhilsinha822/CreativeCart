@@ -159,9 +159,7 @@ export const addNewAddress = async (prevState: { accessToken: string, message: s
                 Authorization: `Bearer ${prevState.accessToken}`,
             }
         })
-        console.log(prevState)
         prevState.user = { ...prevState.user, shippingInfo }
-        console.log(prevState)
         return { ...prevState, message: "Success" }
     } catch (err: any) {
         console.log(err.response)
