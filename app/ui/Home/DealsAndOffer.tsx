@@ -34,7 +34,7 @@ const DealsAndOffer = () => {
             </div>
             <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 md:w-11/12 m-auto overflow-hidden rounded-md py-5'>
                 {products.map((product, index) => {
-                    return <Link key={uuid()} href={`/search?=${product.name}`}>
+                    return <Link key={uuid()} href={`/search?q=${product.name}`}>
                         <div className='flex flex-col text-center justify-center items-center border border-gray-300 min-w-fit'>
                             <div className='h-36 p-5 md:h-40 lg:h-56 flex items-center justify-center text-center'>
                                 <Image className='h-36 w-auto p-5 md:h-auto' src={product.url} alt="product" width={500} height={500} />

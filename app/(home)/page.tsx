@@ -4,7 +4,7 @@ import CardWrapper from '../ui/Home/Cards'
 import { HomeCardsSkeleton } from '../ui/Skeletons'
 import { Suspense } from 'react'
 
-const Home = async () => {
+const Home = () => {
   return (
     <div className='md:bg-blue-50'>
       <Carousel />
