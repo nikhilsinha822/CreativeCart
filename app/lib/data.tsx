@@ -1,5 +1,5 @@
-// 'use server'
-import { productType, productResponseType, cartResponseType, cartStateType } from "./definations"
+'use server'
+import { productType, productResponseType, cartResponseType, cartStateType, orderResponseType, cartDataType } from "./definations"
 
 export const getRecommendedProducts = async (): Promise<{ products: productType[] }> => {
     try {
@@ -22,7 +22,7 @@ export const getSearchResults = async (searchTerm: string): Promise<{ data: prod
     }
 }
 
-export const prepareCart = async ({ token }: { token: string }) : Promise<cartStateType | null> => {
+export const prepareCart = async ({ token }: { token: string }): Promise<cartStateType | null> => {
     const headers = {
         Authorization: `Bearer ${token}`
     }
@@ -54,10 +54,70 @@ export const prepareCart = async ({ token }: { token: string }) : Promise<cartSt
         subTotal: data.subTotal,
         totalSavings: data.totalSavings,
         finalprice: data.finalprice,
-        data:{
+        data: {
             ...data.data[0],
             cartItems: descCartItems
         }
     }
     return cart;
+}
+
+export const prepareOrder = async ({ token }: { token: string }) => {
+    const headers = {
+        Authorization: `Bearer ${token}`
+    }
+
+    const orderResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/order`, {
+        headers
+    });
+
+    const orderData = await orderResponse.json();
+
+    const confirmedOrder = orderData.data.filter((order: orderResponseType) => order.status === 'Confirmed')
+
+    const orderList = confirmedOrder.map(async (order: orderResponseType) => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart/${order.cart}`, {
+            headers
+        })
+        const cartResponse: { success: Boolean, data: cartResponseType } = await res.json();
+        return {
+            ...order,
+            cart: cartResponse.data
+        };
+    })
+
+    const orders = await Promise.all(orderList);
+
+    const ProductList = orders.map(async (order) => {
+        const product = await getCartProducts({ token, cart: order.cart });
+
+        return {
+            ...order,
+            cart: product
+        }
+    })
+
+    const prod = Promise.all(ProductList);
+    return prod;
+}
+
+export const getCartProducts = async ({ token, cart }: { token: string, cart: cartDataType }) => {
+    const headers = {
+        Authorization: `Bearer ${token}`
+    }
+    const productList = cart.cartItems.map(async (item) => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`, {
+            headers
+        })
+
+        const productResponse: { success: Boolean, data: productType } = await res.json();
+        return productResponse.data;
+    })
+
+    const prod = await Promise.all(productList);
+
+    return {
+        ...cart,
+        cartItems: prod
+    };
 }
