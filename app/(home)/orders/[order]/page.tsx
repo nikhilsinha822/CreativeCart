@@ -64,7 +64,7 @@ const OrderDetails = async ({ params }: {
                             </span>
                         </div>
                         <div className='flex flex-wrap justify-between h-8'>
-                            <h6>Delivary:</h6>
+                            <h6>Delivery:</h6>
                             <span className='pl-2'>
                                 ₹0.00 <span className='line-through'>₹{(490).toFixed(2)}</span>
                             </span>

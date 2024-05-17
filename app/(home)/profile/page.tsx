@@ -10,21 +10,22 @@ import Sidebar from '@/app/ui/Profile/Sidebar';
 import Profile from '@/app/ui/Profile/Profile';
 
 const Page = () => {
-    const searchParams = useSearchParams();
-    const link = searchParams.get('link') || "personal";
 
     return (
         <div className='bg-gray-200'>
             <Suspense fallback={<Loading />}>
-                <Dash link={link} />
+                <Dash />
             </Suspense>
         </div>
     )
 }
 
-const Dash = async ({ link }: { link: string }) => {
+const Dash = async () => {
+
     let content;
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const link = searchParams.get('link') || "personal";
     const { token, isAuthenticated } = useContext(AuthContext);
 
     if (!isAuthenticated || token === null || token === ' ') {
