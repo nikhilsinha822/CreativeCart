@@ -1,5 +1,5 @@
 'use server'
-import { productType, productResponseType, cartResponseType, cartStateType, orderResponseType, cartDataType } from "./definations"
+import { productType, productResponseType, cartResponseType, cartStateType, orderResponseType, cartDataType, cartProductType } from "./definations"
 
 export const getRecommendedProducts = async (): Promise<{ products: productType[] }> => {
     try {
@@ -89,7 +89,7 @@ export const prepareOrder = async ({ token }: { token: string }) => {
     const orders = await Promise.all(orderList);
 
     const ProductList = orders.map(async (order) => {
-        const product = await getCartProducts({ token, cart: order.cart });
+        const product = await getCartProducts({ cart: order.cart });
 
         return {
             ...order,
@@ -101,14 +101,9 @@ export const prepareOrder = async ({ token }: { token: string }) => {
     return prod;
 }
 
-export const getCartProducts = async ({ token, cart }: { token: string, cart: cartDataType }) => {
-    const headers = {
-        Authorization: `Bearer ${token}`
-    }
+export const getCartProducts = async ({ cart }: { cart: cartDataType }) => {
     const productList = cart.cartItems.map(async (item) => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`, {
-            headers
-        })
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`)
 
         const productResponse: { success: Boolean, data: productType } = await res.json();
         return productResponse.data;

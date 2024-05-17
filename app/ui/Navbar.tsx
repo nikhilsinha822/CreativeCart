@@ -164,7 +164,7 @@ const SearchBar = ({ category }: SearchParams) => {
   const handleSearch = (e: any) => {
     e.preventDefault();
     if (query === "") return;
-    replace(`search?q=${query}`);
+    replace(`/search?q=${query}`);
   }
 
   return <form onSubmit={handleSearch} className="w-3/5 pt-2 pb-2 items-center hidden sm:flex">
@@ -187,7 +187,7 @@ const MobileSearchBar = () => {
   const handleSearch = (e: any) => {
     e.preventDefault();
     if (query === "") return;
-    replace(`search?q=${query}`);
+    replace(`/search?q=${query}`);
   }
 
   return <form onSubmit={handleSearch} className="flex justify-center sm:hidden">
