@@ -1,7 +1,7 @@
-import Carousel from '../ui/Home/Carousel'
-import DealsAndOffer from '../ui/Home/DealsAndOffer'
-import CardWrapper from '../ui/Home/Cards'
-import { HomeCardsSkeleton } from '../ui/Skeletons'
+import Carousel from '@/app/ui/Home/Carousel'
+import DealsAndOffer from '@/app/ui/Home/DealsAndOffer'
+import CardWrapper from '@/app/ui/Home/Cards'
+import { HomeCardsSkeleton } from '@/app/ui/Skeletons'
 import { Suspense } from 'react'
 
 const Home = () => {

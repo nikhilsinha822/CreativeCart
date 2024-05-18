@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from '../ui/Navbar'
-import Footer from '../ui/Footer'
+import Navbar from '@/app/ui/Navbar'
+import Footer from '@/app/ui/Footer'
 
 interface HomeLayoutProps {
   children?: React.ReactNode

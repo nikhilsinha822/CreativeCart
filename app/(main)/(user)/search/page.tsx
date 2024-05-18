@@ -1,6 +1,6 @@
 import React from 'react'
 import { Suspense } from 'react'
-import ProductList from '../../ui/Search/ProductsList'
+import ProductList from '@/app/ui/Search/ProductsList'
 import Loading from '@/app/ui/Loading'
 
 type SearchProps = {
