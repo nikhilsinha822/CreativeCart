@@ -12,7 +12,7 @@ import profile from '@/app/assets/profile.jpg'
 import { redirect } from 'next/navigation'
 
 const Register = () => {
-  const initialState = { message: "", accessToken: "" };
+  const initialState = { message: "", accessToken: "", roles: "" };
 
   const [avatar, setAvatar] = useState("");
   const { loginState } = useContext(AuthContext);
@@ -20,10 +20,10 @@ const Register = () => {
 
   useEffect(() => {
     if (response.message === "Success") {
-      loginState(response.accessToken);
+      loginState(response.accessToken, response.roles);
       redirect('/')
     }
-  }, [response.message, response.accessToken, loginState]);
+  }, [response, loginState]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;

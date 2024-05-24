@@ -6,19 +6,22 @@ import axios from 'axios'
 type AuthState = {
     isAuthenticated: boolean | null;
     token: string | null;
+    roles: string | null;
 }
 
 
 type AuthContextType = {
     isAuthenticated: boolean | null;
     token: string | null;
-    loginState: (token: string) => void;
+    roles: string | null;
+    loginState: (token: string, roles: string) => void;
     logoutState: () => void;
 }
 
 const initialState = {
     isAuthenticated: null,
     token: null,
+    roles: null
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -32,16 +35,19 @@ const reducer = (state: AuthState, action: { type: string, payload: any }) => {
         case 'LOGIN':
             return {
                 isAuthenticated: true,
-                token: action.payload,
+                roles: action.payload.roles,
+                token: action.payload.token,
             }
         case 'LOGOUT':
             return {
                 isAuthenticated: false,
+                roles: null,
                 token: null,
             }
         case 'LOADING':
             return {
                 isAuthenticated: null,
+                roles: null,
                 token: null,
             }
         default:
@@ -51,40 +57,44 @@ const reducer = (state: AuthState, action: { type: string, payload: any }) => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [accessToken, setToken, clearToken] = useLocalStorage('accessToken', ' ');
+    const [roles, setRoles, clearRoles] = useLocalStorage('roles', ' ')
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const loginState = useCallback((token: string) => {
+    const loginState = useCallback((token: string, roles: string) => {
         setToken(token);
+        setRoles(roles);
         dispatch({
             type: 'LOGIN',
-            payload: token,
+            payload: { token, roles },
         })
-    },[setToken])
+    }, [setToken, setRoles])
 
     const logoutState = useCallback(() => {
         clearToken();
+        clearRoles();
         dispatch({
             type: 'LOGOUT',
-            payload: null,
+            payload: { token: null, roles: null },
         })
-    },[clearToken])
+    }, [clearToken, clearRoles])
 
     useEffect(() => {
         if (accessToken) {
             dispatch({
                 type: 'LOGIN',
-                payload: accessToken,
+                payload: { token: accessToken, roles },
             })
         } else {
             dispatch({
                 type: 'LOGOUT',
-                payload: null,
+                payload: { token: null, roles: null },
             })
         }
-    }, [accessToken])
+    }, [accessToken, roles])
 
     useEffect(() => {
         const revalidateToken = async () => {
+            console.log("revalidate")
             try {
                 await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/validate`, {
                     headers: {
@@ -96,7 +106,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/refresh`, {}, {
                         withCredentials: true,
                     });
-                    loginState(response.data.accessToken);
+                    console.log("new", response.data.accessToken, response.data.roles)
+                    loginState(response.data.accessToken, response.data.roles);
                 } catch (error: any) {
                     logoutState();
                 }

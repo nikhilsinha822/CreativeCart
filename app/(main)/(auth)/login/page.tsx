@@ -10,17 +10,17 @@ import Button from '@/app/ui/Button'
 import Image from 'next/image'
 
 const Login = () => {
-    const initialState = { message: "", accessToken: "" };
+    const initialState = { message: "", accessToken: "", roles:[] };
 
     const { loginState } = useContext(AuthContext)
     const [response, loginAction] = useFormState(handleLogin, initialState);
 
     useEffect(() => {
         if (response.message === "Success") {
-            loginState(response.accessToken);
+            loginState(response.accessToken, response.roles);
             redirect('/')
         }
-    }, [response.message, response.accessToken, loginState])
+    }, [response, loginState])
 
     return (
         <div className='flex justify-center md:mx-20 py-auto h-screen'>

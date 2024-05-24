@@ -67,7 +67,7 @@ export const handleLogin = async (prevState: { message: string, token?: string }
             })
         }
 
-        return { message: "Success", accessToken: response.data.accessToken };
+        return { message: "Success", accessToken: response.data.accessToken, roles: response.data.roles };
     } catch (error: any) {
         switch (error?.response?.status) {
             case 401:
@@ -89,7 +89,6 @@ export const handleRegister = async (prevState: { message: string, token?: strin
     });
 
     if (!validatedFields.success) {
-        // console.log(validatedFields.error.errors)
         return { message: validatedFields.error.errors[0].message };
     }
 
@@ -126,7 +125,7 @@ export const handleRegister = async (prevState: { message: string, token?: strin
             })
         }
 
-        return { message: "Success", accessToken: response.data.accessToken };
+        return { message: "Success", accessToken: response.data.accessToken, roles: response.data.roles };
     } catch (error: any) {
         // console.log("error", error);
         return { message: error?.response?.data?.message || "Unknown error" }
