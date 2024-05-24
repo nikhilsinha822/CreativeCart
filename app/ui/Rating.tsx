@@ -12,11 +12,11 @@ const Rating = ({ product }: { product: productType }) => {
                     [...Array(5)].map((key, index) => {
                         return <FaStar
                             key={uuidv4()}
-                            className={`${index + 1 > rating ? "text-gray-400" : "text-yellow-400"}`}
+                            className={`${index + 1 > (rating || 0) ? "text-gray-400" : "text-yellow-400"}`}
                         />
                     })
                 }
-                <span className='font-semibold text-yellow-400 mx-1 text-sm'>{`${rating}`}</span>
+                <span className='font-semibold text-yellow-400 mx-1 text-sm'>{`${rating || 0}`}</span>
                 <span className='text-gray-400 text-xs'>{`(${product.rating.numReviews})`}</span>
             </div>
         </>
