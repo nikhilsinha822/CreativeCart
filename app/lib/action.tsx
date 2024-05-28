@@ -2,6 +2,7 @@
 import z from 'zod';
 import axios from 'axios';
 import { shippingInfoType, userResponseType } from './definations';
+import { revalidateTag } from 'next/cache'
 
 const addressSchema = z.object({
     address: z.string().min(10, { message: "Address should be atleast 10 characters long" }).max(100, { message: "Address should be atmost 100 characters long" }),
@@ -246,11 +247,9 @@ export const addNewProduct = async (prevState: { success: boolean, token: string
                 "Content-Type": "multipart/form-data"
             }
         })
-        console.log(response)
+        revalidateTag(`products ${response.data.product}`)
         return { ...prevState, success: true, error: false, message: "Success", data: response.data.product }   
     } catch (err: any) {
         return { ...prevState, error: true, message: err.response.data.message }
     }
-
-    return prevState
 }

@@ -25,7 +25,9 @@ const page = ({ params }: { params: { product: string } }) => {
 }
 
 const Product = async ({ product }: { product: string }) => {
-    const resposne = await fetch(`${process.env.BASE_URL}/api/v1/product/${product}`)
+    const resposne = await fetch(`${process.env.BASE_URL}/api/v1/product/${product}`, {
+        next: { tags: [`products ${product}`] }
+    })
     const productResponse: { success: Boolean, data: productType } = await resposne.json();
     const productData = productResponse?.data;
 
@@ -51,7 +53,9 @@ const Product = async ({ product }: { product: string }) => {
 }
 
 const RelatedProducts = async ({ product }: { product: string }) => {
-    const productResponse = await fetch(`${process.env.BASE_URL}/api/v1/product/${product}`);
+    const productResponse = await fetch(`${process.env.BASE_URL}/api/v1/product/${product}`, {
+        next: { tags: [`products ${product}`] }
+    });
     const productJson = await productResponse.json();
     const productData = productJson.data;
 

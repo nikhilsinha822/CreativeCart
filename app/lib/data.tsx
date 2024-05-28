@@ -36,7 +36,9 @@ export const prepareCart = async ({ token }: { token: string }): Promise<cartSta
         return null;
 
     const productList = data.data[0].cartItems.map(async (item) => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`, {
+            next: { tags: [`products ${item.product}`] }
+        })
         const productResponse: { success: Boolean, data: productType } = await res.json();
         return productResponse.data;
     })
@@ -103,7 +105,9 @@ export const prepareOrder = async ({ token }: { token: string }) => {
 
 export const getCartProducts = async ({ cart }: { cart: cartDataType }) => {
     const productList = cart.cartItems.map(async (item) => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/product/${item.product}`, {
+            next: { tags: [`products ${item.product}`] }
+        })
 
         const productResponse: { success: Boolean, data: productType } = await res.json();
         return productResponse.data;
