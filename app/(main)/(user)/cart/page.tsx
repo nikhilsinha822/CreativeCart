@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { useContext } from 'react'
 import { AuthContext } from '@/app/context/authContext'
@@ -14,7 +14,7 @@ import emptyCart from '@/app/assets/emptyCart.png'
 import { prepareCart } from '@/app/lib/data'
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaLongArrowAltRight } from "react-icons/fa";
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
 
 type cartPropsType = {
     item: cartItemStateType,
@@ -25,15 +25,6 @@ type cartPropsType = {
 
 
 const Cart = () => {
-    return (
-        <div>
-            <Suspense fallback={<Loading />}>
-                <CartList />
-            </Suspense>
-        </div>
-    )
-}
-const CartList = async () => {
     let content;
     const router = useRouter();
     const { token, isAuthenticated } = useContext(AuthContext);
@@ -51,16 +42,33 @@ const CartList = async () => {
         }
     }
     else {
-        const cart = await prepareCart({ token });
-        if (cart === null)
-            content = <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
-                <Image className='mx-auto' src={emptyCart} width={300} height={300} alt={"cartEmpty"} />
-                <h1 className='text-xl'>Your cart is empty!</h1>
-                <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/')}>Shop Now</button>
-            </div>
-        else
-            content = <ProductList cart={cart} />
+        content = <div>
+            <Suspense fallback={<Loading />}>
+                <CartList token={token} />
+            </Suspense>
+        </div>
+
+        return content;
     }
+}
+const CartList = ({ token }: { token: string }) => {
+    let content;
+    const [cart, setCart] = useState<null | cartStateType>(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        prepareCart({ token }).then((cart) => setCart(cart))
+            .catch((err) => toast.error(err))
+    }, [token])
+
+    if (cart === null)
+        content = <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
+            <Image className='mx-auto' src={emptyCart} width={300} height={300} alt={"cartEmpty"} />
+            <h1 className='text-xl'>Your cart is empty!</h1>
+            <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/')}>Shop Now</button>
+        </div>
+    else
+        content = <ProductList cart={cart} />
 
     return content;
 }
@@ -106,7 +114,7 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
         return Date.parse(b.createdAt) - Date.parse(a.createdAt)
     });
     const handleCartProceed = () => {
-        if(cartPriceState.finalprice > 500000){
+        if (cartPriceState.finalprice > 500000) {
             toast.error('Cart value cannot exceed ₹500000. Please remove some items', {
                 duration: 5000
             })
@@ -119,7 +127,7 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
             <div className='shadow-2xl p-4 rounded-md bg-white md:w-9/12'>
                 <button
                     className='bg-green-500 w-fit text-white rounded p-2 m-4 flex items-center md:hidden ml-auto'
-                    onClick={checkoutScroll}>Checkout &nbsp; <FaLongArrowAltRight/></button>
+                    onClick={checkoutScroll}>Checkout &nbsp; <FaLongArrowAltRight /></button>
                 {
                     cartItemsState.map((item, index) => {
                         return (
@@ -163,9 +171,9 @@ const ProductList = ({ cart }: { cart: cartStateType }) => {
                     <h6>Total:</h6>
                     ₹{(cartPriceState.finalprice).toFixed(2)}
                 </div>
-                <button 
-                onClick={handleCartProceed}
-                className='bg-green-600 hover:bg-green-800 text-white rounded w-full p-2 my-2'>
+                <button
+                    onClick={handleCartProceed}
+                    className='bg-green-600 hover:bg-green-800 text-white rounded w-full p-2 my-2'>
                     Proceed
                 </button>
             </div>
@@ -195,8 +203,8 @@ const Product = ({ item, cartItemsState, setCartItemsState, updateCart }: cartPr
                 <h1 className='font-bold text-md'>{productData.title}</h1>
                 <span className='flex gap-2 items-center text-xl'>
                     <p className='font-medium text-sm'>₹{productData.price - productData.discountValue}</p>
-                    {(productData.discountValue !== 0 ) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
-                    
+                    {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
+
                 </span>
                 <h1 className='text-gray-500 text-xs overflow-hidden overflow-ellipsis h-8'>{productData.desc}</h1>
             </div>
