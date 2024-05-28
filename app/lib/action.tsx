@@ -112,7 +112,7 @@ export const handleProfile = async (prevState: { accessToken: string, message: s
 export const deleteAddress = async (index: number, shippingInfo: shippingInfoType[], token: string) => {
 
     shippingInfo = shippingInfo.filter((val, ind) => ind != shippingInfo.length - 1 - index);
-    
+
     try {
         await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/profile/me`,
             {
@@ -165,4 +165,87 @@ export const addNewAddress = async (prevState: { accessToken: string, message: s
         console.log(err.response)
         return { ...prevState, message: err.response.data.message }
     }
+}
+
+const productSchema = z.object({
+    title: z.string({
+        invalid_type_error: "Invalid title",
+        required_error: "Title is required",
+    }).min(40, { message: "Title is too small" }),
+    images: z.any({
+        invalid_type_error: "Invalid images",
+        required_error: "Images are required",
+    }),
+    summary: z.string({
+        invalid_type_error: "Invalid summary",
+        required_error: "Summary is required",
+    }).min(100, { message: "Summary is too small" }),
+    desc: z.string({
+        invalid_type_error: "Invalid desc",
+        required_error: "Desc is required",
+    }).min(100, { message: "Description is too small" }),
+    price: z.number({
+        invalid_type_error: "Invalid price",
+        required_error: "Price is required",
+    }).min(0, { message: "Price cannot be negative" }),
+    stock: z.number({
+        invalid_type_error: "Invalid stock",
+        required_error: "Stock is required",
+    }).min(0, { message: "Stock cannot be negative" }),
+    discountType: z.string({
+        invalid_type_error: "Invalid discountType",
+        required_error: "Discount Type is required",
+    }),
+    discountValue: z.number({
+        invalid_type_error: "Invalid discountValue",
+        required_error: "Discount Value is required",
+    }).min(0, { message: "Discount Value cannot be negative" }),
+
+})
+
+export const addNewProduct = async (prevState: { success: boolean, token: string, error: boolean, data: null, message: string }, formData: FormData) => {
+    const validatedFields = productSchema.safeParse({
+        title: formData.get('title'),
+        images: formData.getAll('images'),
+        summary: formData.get('summary'),
+        desc: formData.get('desc'),
+        price: Number(formData.get('price')),
+        stock: Number(formData.get('stock')),
+        discountType: formData.get('discountType'),
+        discountValue: Number(formData.get('discountValue')),
+    });
+
+    
+    if (validatedFields.success === false)
+        return { ...prevState, error: true, message: validatedFields.error.errors[0].message }
+
+    if (validatedFields.data.images.length < 4)
+        return { ...prevState, error: true, message: "Atleast add 4 images of product" }
+
+    const formDataToSend = new FormData();
+
+    for(let i=0;i<validatedFields.data.images.length;i++){
+        formDataToSend.append('images', validatedFields.data.images[i]);
+    }
+    formDataToSend.append('title', validatedFields.data.title)
+    formDataToSend.append('summary', validatedFields.data.summary)
+    formDataToSend.append('desc', validatedFields.data.desc)
+    formDataToSend.append('price', validatedFields.data.price.toString())
+    formDataToSend.append('stock', validatedFields.data.stock.toString())
+    formDataToSend.append('discountType', validatedFields.data.discountType)
+    formDataToSend.append('discountValue', validatedFields.data.discountValue.toString())
+
+    try {
+        const response = await axios.post(`${process.env.BASE_URL}/api/v1/admin/product/new`, formDataToSend, {
+            headers: {
+                Authorization: `Bearer ${prevState.token}`,
+                "Content-Type": "multipart/form-data"
+            }
+        })
+        console.log(response)
+    } catch (err: any) {
+        return { ...prevState, error: true, message: err.response.data.message }
+    }
+
+    return prevState
 }
