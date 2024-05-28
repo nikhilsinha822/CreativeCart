@@ -94,7 +94,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         const revalidateToken = async () => {
-            console.log("revalidate")
             try {
                 await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/validate`, {
                     headers: {
@@ -106,7 +105,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/refresh`, {}, {
                         withCredentials: true,
                     });
-                    console.log("new", response.data.accessToken, response.data.roles)
                     loginState(response.data.accessToken, response.data.roles);
                 } catch (error: any) {
                     logoutState();

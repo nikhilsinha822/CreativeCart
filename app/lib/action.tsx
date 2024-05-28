@@ -171,7 +171,7 @@ const productSchema = z.object({
     title: z.string({
         invalid_type_error: "Invalid title",
         required_error: "Title is required",
-    }).min(40, { message: "Title is too small" }),
+    }).min(20, { message: "Title is too small" }),
     images: z.any({
         invalid_type_error: "Invalid images",
         required_error: "Images are required",
@@ -179,7 +179,7 @@ const productSchema = z.object({
     summary: z.string({
         invalid_type_error: "Invalid summary",
         required_error: "Summary is required",
-    }).min(100, { message: "Summary is too small" }),
+    }).min(50, { message: "Summary is too small" }),
     desc: z.string({
         invalid_type_error: "Invalid desc",
         required_error: "Desc is required",
@@ -204,6 +204,10 @@ const productSchema = z.object({
 })
 
 export const addNewProduct = async (prevState: { success: boolean, token: string, error: boolean, data: null, message: string }, formData: FormData) => {
+    
+    console.log(formData, formData.getAll('images').length);
+    // return prevState
+    
     const validatedFields = productSchema.safeParse({
         title: formData.get('title'),
         images: formData.getAll('images'),
@@ -243,6 +247,7 @@ export const addNewProduct = async (prevState: { success: boolean, token: string
             }
         })
         console.log(response)
+        return { ...prevState, success: true, error: false, message: "Success", data: response.data.product }   
     } catch (err: any) {
         return { ...prevState, error: true, message: err.response.data.message }
     }
