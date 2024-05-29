@@ -64,10 +64,12 @@ const OrderList = ({ token }: { token: string }) => {
       <h1 className='text-xl'>Your Order List is empty!</h1>
       <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/')}>Shop Now</button>
     </div>
-  else
+  else{
+    confirmedOrder.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     content = <div>
       {
         confirmedOrder.reverse().map((order) => {
+          // console.log(order)
           return <div className='md:my-10' key={uuid()}>
             <OrderContainerHeader order={order} />
             <div className='md:w-9/12 rounded-t-md mx-auto justify-between'>
@@ -82,7 +84,7 @@ const OrderList = ({ token }: { token: string }) => {
         })
       }
     </div>
-
+  }
   return content;
 }
 
