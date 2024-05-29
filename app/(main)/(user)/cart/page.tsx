@@ -57,8 +57,8 @@ const CartList = ({ token }: { token: string }) => {
             .finally(() => setIsLoading(false))
     }, [token])
 
-    if(isLoading)
-        content = <Loading/>
+    if (isLoading)
+        content = <Loading />
     else if (cart === null)
         content = <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
             <Image className='mx-auto' src={emptyCart} width={300} height={300} alt={"cartEmpty"} />
@@ -200,8 +200,21 @@ const Product = ({ item, cartItemsState, setCartItemsState, updateCart }: cartPr
             <div>
                 <h1 className='font-bold text-md'>{productData.title}</h1>
                 <span className='flex gap-2 items-center text-xl'>
-                    <p className='font-medium text-sm'>₹{productData.price - productData.discountValue}</p>
-                    {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
+                    {
+                        productData.discountType === 'none' ?
+                            <>
+                                <p className='font-medium text-sm'>₹{productData.price}</p>
+                            </> :
+                        productData.discountType === 'percent' ?
+                            <>
+                                <p className='font-medium text-sm'>₹{(productData.price - productData.price * productData.discountValue * 0.01).toFixed(2)}</p>
+                                <p className='line-through text-gray-500 text-sm'>₹{productData.price}</p>
+                            </> :
+                            <>
+                                <p className='font-medium text-sm'>₹{productData.price - productData.discountValue}</p>
+                                {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price}</p>}
+                            </>
+                    }
 
                 </span>
                 <h1 className='text-gray-500 text-xs overflow-hidden overflow-ellipsis h-8'>{productData.desc}</h1>

@@ -62,8 +62,23 @@ const Product = ({ product }: { product: productType }) => {
                     src={product.images[0].url} width={800} height={800} alt={product.title} />
                 <div className='mt-2 pt-2 border-t border-gray-400'>
                     <span className='flex gap-2 items-center'>
-                        <p className='font-semibold'>₹{product.price - product.discountValue}</p>
-                        {(product.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{product.price + product.discountValue}</p>}
+                        {
+                            product.discountType === 'none' ?
+                                <>
+                                    <p className='font-medium text-sm'>₹{product.price}</p>
+                                </> :
+                                product.discountType === 'percent' ?
+                                    <>
+                                        <p className='font-medium text-sm'>₹{(product.price - product.price * product.discountValue * 0.01).toFixed(2)}</p>
+                                        <p className='line-through text-gray-500 text-sm'>₹{product.price}</p>
+                                    </> :
+                                    <>
+                                        <p className='font-medium text-sm'>₹{product.price - product.discountValue}</p>
+                                        {(product.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{product.price}</p>}
+                                    </>
+                        }
+                        {/* <p className='font-semibold'>₹{product.price - product.discountValue}</p>
+                        {(product.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{product.price + product.discountValue}</p>} */}
                     </span>
                     <Rating product={product} />
                     <p className='font-lightbold w-9/12'>{product.title}</p>

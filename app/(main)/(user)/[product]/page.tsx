@@ -6,7 +6,7 @@ import BottomButtons from '@/app/ui/Product/BottomButtons'
 import Loading from '@/app/ui/Loading'
 import Image from 'next/image'
 import Link from 'next/link'
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid'
 
 
 const page = ({ params }: { params: { product: string } }) => {
@@ -39,8 +39,23 @@ const Product = async ({ product }: { product: string }) => {
             <h1 className='font-bold text-xl'>{productData.title}</h1>
             <Rating product={productData} />
             <span className='flex gap-2 items-center text-xl'>
-                <p className='font-semibold'>₹{productData.price - productData.discountValue}</p>
-                {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>}
+                {
+                    productData.discountType === 'none' ?
+                        <>
+                            <p className='font-medium text-sm'>₹{productData.price}</p>
+                        </> :
+                        productData.discountType === 'percent' ?
+                            <>
+                                <p className='font-medium text-sm'>₹{(productData.price - productData.price * productData.discountValue * 0.01).toFixed(2)}</p>
+                                <p className='line-through text-gray-500 text-sm'>₹{productData.price}</p>
+                            </> :
+                            <>
+                                <p className='font-medium text-sm'>₹{productData.price - productData.discountValue}</p>
+                                {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price}</p>}
+                            </>
+                }
+                {/* <p className='font-semibold'>₹{productData.price - productData.discountValue}</p>
+                {(productData.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{productData.price + productData.discountValue}</p>} */}
             </span>
             {productData.stock > 0 ? <p className='text-green-500'>In Stock</p> : <p className='text-red-500'>Out of Stock</p>}
             <p>{productData.desc}</p>
@@ -67,14 +82,14 @@ const RelatedProducts = async ({ product }: { product: string }) => {
     const searchResponse = await resposne.json();
     const searchProductData = searchResponse.data;
 
-    if(searchProductData.length < 5){
+    if (searchProductData.length < 5) {
         return <></>
     }
 
     return (
         <div className='md:mx-10 p-5 bg-white'>
             <h1 className='text-2xl font-bold my-5'>
-            Similar Products
+                Similar Products
             </h1>
             {
                 <div className='grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-5 md:gap-5'>
@@ -93,10 +108,27 @@ const Card = ({ product }: { product: productType }) => {
     return <div className='bg-white p-3 rounded-sm border shadow-sm'>
         <Link href={`/${product._id}`}>
             <Image className='aspect-square' src={product.images[0].url} alt={product.title} width={500} height={500} />
-            <p className='font-bold text-sm pb-1 pt-3'>₹{product.price}</p>
+            {/* <p className='font-bold text-sm pb-1 pt-3'>₹{product.price}</p> */}
+            <span className='flex gap-2 py-3'>
+                {
+                    product.discountType === 'none' ?
+                        <>
+                            <p className='font-medium text-sm'>₹{product.price}</p>
+                        </> :
+                        product.discountType === 'percent' ?
+                            <>
+                                <p className='font-medium text-sm'>₹{(product.price - product.price * product.discountValue * 0.01).toFixed(2)}</p>
+                                <p className='line-through text-gray-500 text-sm'>₹{product.price}</p>
+                            </> :
+                            <>
+                                <p className='font-medium text-sm'>₹{product.price - product.discountValue}</p>
+                                {(product.discountValue !== 0) && <p className='line-through text-gray-500 text-sm'>₹{product.price}</p>}
+                            </>
+                }
+            </span>
             <p className='text-gray-400 text-sm'>{product.title}</p>
         </Link>
     </div >
 }
 
-export default page
+export default page 
