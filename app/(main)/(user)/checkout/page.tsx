@@ -2,8 +2,8 @@
 import React, { useEffect, useContext, useState, Suspense } from 'react'
 import { AuthContext } from '@/app/context/authContext';
 import Loading from '@/app/ui/Loading';
-import { redirect, useRouter } from 'next/navigation';
-import { cartResponseType } from '@/app/lib/definations';
+import { useRouter } from 'next/navigation';
+import { cartResponseType, shippingInfoType } from '@/app/lib/definations';
 import { createOrder } from '@/app/lib/action';
 import { useFormState, useFormStatus } from 'react-dom';
 import { BsExclamationCircle } from 'react-icons/bs'
@@ -12,6 +12,7 @@ import Script from 'next/script';
 import axios from 'axios';
 import NotLoggedIn from '@/app/ui/NotLoggedIn';
 import { useSearchParams } from 'next/navigation';
+import AddressDialog from '@/app/ui/Checkout.tsx/AddressDialog';
 
 const Page = () => {
   let content;
@@ -72,7 +73,7 @@ const Page = () => {
   else {
     content = <>{
       !isRedirecting ?
-          <Checkout token={token} cartId={cartId} handlePayment={handlePayment} />
+        <Checkout token={token} cartId={cartId} handlePayment={handlePayment} />
         : <Loading />
     }
       <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
@@ -83,11 +84,11 @@ const Page = () => {
 
 const Checkout = ({ token, cartId, handlePayment }: { token: string, cartId: string | null, handlePayment: (order: string) => Promise<void> }) => {
   let content;
-  console.log(cartId)
   const initialState = { success: false, message: "", data: { token, order: " ", cart: cartId } };
   const [isLoading, setIsLoading] = useState(true);
   const [cartData, setCartData] = useState<cartResponseType | null>(null);
   const [response, orderAction] = useFormState(createOrder, initialState);
+  const [shipping, setShipping] = useState<shippingInfoType | null>(null)
   const input = "p-2 my-2 border-b border-gray-500 hover:border-black focus:border-black focus:outline-none w-full"
 
   useEffect(() => {
@@ -129,35 +130,43 @@ const Checkout = ({ token, cartId, handlePayment }: { token: string, cartId: str
         <form className='m-auto md:flex' action={orderAction}>
           <div className='flex flex-col md:w-7/12 m-auto rounded-sm px-6 md:p-10'>
             <h3 className='text-3xl'>Billing Details</h3>
+            <AddressDialog token={token} setShipping={setShipping} />
             <label className="font-bold pt-5" htmlFor="address">Address</label>
             <input
               required
               className={input}
-              type="type" name='address' placeholder='38119 Viva Run' />
+              defaultValue={shipping?.address}
+              type="type" name='address' placeholder='38119 Viva Run'
+            />
             <label className="font-bold" htmlFor="city">City</label>
             <input
               required
               className={input}
+              defaultValue={shipping?.city}
               type="text" name='city' placeholder='Port Gwendolynport' />
             <label className="font-bold" htmlFor="state">State</label>
             <input
               required
               className={input}
+              defaultValue={shipping?.state}
               type="text" name="state" placeholder="Delaware" />
             <label className="font-bold" htmlFor="country">Country</label>
             <input
               required
               className={input}
+              defaultValue={shipping?.country}
               type="text" name="country" placeholder="USA" />
             <label className="font-bold" htmlFor="pinCode">Pin Code</label>
             <input
               required
               className={input}
+              defaultValue={shipping?.pinCode}
               type="text" name="pinCode" placeholder="12345" />
             <label className="font-bold" htmlFor="phoneNo">Phone No.</label>
             <input
               required
               className={input}
+              defaultValue={shipping?.phoneNo}
               type="text" name="phoneNo" placeholder="+1-870-270-2470" />
             {response.message && response.message !== "Success" && (
               <div className='flex items-center mt-2'>
@@ -177,7 +186,7 @@ const Checkout = ({ token, cartId, handlePayment }: { token: string, cartId: str
 const CartTotal = ({ cartData }: { cartData: cartResponseType }) => {
   const data = useFormStatus();
   const router = useRouter();
-  if(!cartData || !cartData.subTotal)
+  if (!cartData || !cartData.subTotal)
     router.push('/cart')
 
   return (
