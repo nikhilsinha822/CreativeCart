@@ -7,11 +7,13 @@ import axios, { AxiosResponse } from 'axios'
 import toast from 'react-hot-toast'
 import { useRouter, usePathname } from 'next/navigation'
 import Loader2 from '../Loader2'
+import { handleDirectBuy } from '@/app/lib/action'
 
 const BottomButtons = ({ product }: { product: string }) => {
   const { token, isAuthenticated } = useContext(AuthContext);
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false)
+  const [isBuying, setIsBuying] = useState(false)
   const router = useRouter();
   const addToCart = async () => {
     const headers = {
@@ -50,6 +52,15 @@ const BottomButtons = ({ product }: { product: string }) => {
     }
   }
 
+  const handlebuyNow = async () => {
+    if(!token) return router.replace(`/login?redirectTo=${pathname}`);
+    setIsBuying(true);
+    const response = await handleDirectBuy(product, token);
+    console.log(response);
+    setIsBuying(false);
+    if(response?.data) router.push(`/checkout?cart=${response.data._id}`);
+  }
+
 
   return (
     <div className='flex gap-2'>
@@ -62,7 +73,15 @@ const BottomButtons = ({ product }: { product: string }) => {
         Add to Cart
         {isLoading && <Loader2 />}
       </button>
-      <Button>Buy</Button>
+      <button
+        className='bg-blue-600 text-white p-3 rounded mt-8 hover:bg-blue-800 focus:outline-none focus:ring-1 focus:ring-black disabled:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-50
+            font-bold flex items-center justify-center text-center w-full text-sm'
+        disabled={isBuying || isAuthenticated === null}
+        onClick={handlebuyNow}
+      >
+        Buy Now
+        {isBuying && <Loader2 />}
+      </button>
     </div>
   )
 }

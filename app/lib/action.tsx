@@ -17,13 +17,26 @@ const addressSchema = z.object({
     }).min(1000000000, { message: "Invalid phone number" }).max(9999999999, { message: "Invalid phone number" })
 })
 
-export const createOrder = async (prevState: { data: { token: string, order: string } }, formData: FormData) => {
+export const createOrder = async (prevState: { data: { token: string, order: string, cart: string | null } }, formData: FormData) => {
     const headers = {
         Authorization: `Bearer ${prevState.data.token}`
     }
 
-    const cartResponse = await axios.get(`${process.env.BASE_URL}/api/v1/cart`, { headers })
-    const cartId = cartResponse.data.data[0]._id;
+    let cartResponse, cartId;
+
+    try {
+        if (prevState.data.cart) {
+            cartResponse = await axios.get(`${process.env.BASE_URL}/api/v1/cart/${prevState.data.cart}`, { headers });
+            cartId = cartResponse.data.data._id;
+        }
+        else {
+            cartResponse = await axios.get(`${process.env.BASE_URL}/api/v1/cart`, { headers });
+            cartId = cartResponse.data.data[0]._id
+        }
+    } catch (err) {
+        return { success: false, message: "Cart is empty", data: prevState.data }
+    }
+
     const finalPrice = cartResponse.data.finalPrice;
 
     if (finalPrice > 500000)
@@ -57,7 +70,8 @@ export const createOrder = async (prevState: { data: { token: string, order: str
         const order = response.data.data.order._id;
         return { success: true, message: "Success", data: { ...prevState.data, order } }
     } catch (err: any) {
-        return { success: false, message: err.data.message, data: { ...prevState.data } }
+        // console.log(err);
+        return { success: false, message: "There was some Error in creating Order", data: { ...prevState.data } }
     }
 }
 
@@ -163,7 +177,6 @@ export const addNewAddress = async (prevState: { accessToken: string, message: s
         prevState.user = { ...prevState.user, shippingInfo }
         return { ...prevState, message: "Success" }
     } catch (err: any) {
-        console.log(err.response)
         return { ...prevState, message: err.response.data.message }
     }
 }
@@ -205,10 +218,6 @@ const productSchema = z.object({
 })
 
 export const addNewProduct = async (prevState: { success: boolean, token: string, error: boolean, data: null, message: string }, formData: FormData) => {
-    
-    console.log(formData, formData.getAll('images').length);
-    // return prevState
-    
     const validatedFields = productSchema.safeParse({
         title: formData.get('title'),
         images: formData.getAll('images'),
@@ -220,7 +229,7 @@ export const addNewProduct = async (prevState: { success: boolean, token: string
         discountValue: Number(formData.get('discountValue')),
     });
 
-    
+
     if (validatedFields.success === false)
         return { ...prevState, error: true, message: validatedFields.error.errors[0].message }
 
@@ -229,7 +238,7 @@ export const addNewProduct = async (prevState: { success: boolean, token: string
 
     const formDataToSend = new FormData();
 
-    for(let i=0;i<validatedFields.data.images.length;i++){
+    for (let i = 0; i < validatedFields.data.images.length; i++) {
         formDataToSend.append('images', validatedFields.data.images[i]);
     }
     formDataToSend.append('title', validatedFields.data.title)
@@ -248,8 +257,21 @@ export const addNewProduct = async (prevState: { success: boolean, token: string
             }
         })
         revalidateTag(`products ${response.data.product}`)
-        return { ...prevState, success: true, error: false, message: "Success", data: response.data.product }   
+        return { ...prevState, success: true, error: false, message: "Success", data: response.data.product }
     } catch (err: any) {
         return { ...prevState, error: true, message: err.response.data.message }
+    }
+}
+
+export const handleDirectBuy = async (product: string, token: string) => {
+    try {
+        const response = await axios.post(`${process.env.BASE_URL}/api/v1/directbuy`, { product }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return { success: true, message: "Success", data: response.data.data }
+    } catch (err: any) {
+        return { success: false, message: err.response.data.message, data: null }
     }
 }

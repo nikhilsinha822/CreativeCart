@@ -48,14 +48,18 @@ const Cart = () => {
 const CartList = ({ token }: { token: string }) => {
     let content;
     const [cart, setCart] = useState<null | cartStateType>(null);
+    const [isLoading, setIsLoading] = useState(true)
     const router = useRouter();
 
     useEffect(() => {
         prepareCart({ token }).then((cart) => setCart(cart))
             .catch((err) => toast.error(err))
+            .finally(() => setIsLoading(false))
     }, [token])
 
-    if (cart === null)
+    if(isLoading)
+        content = <Loading/>
+    else if (cart === null)
         content = <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
             <Image className='mx-auto' src={emptyCart} width={300} height={300} alt={"cartEmpty"} />
             <h1 className='text-xl'>Your cart is empty!</h1>

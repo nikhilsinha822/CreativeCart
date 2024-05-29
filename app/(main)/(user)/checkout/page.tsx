@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext, useState, Suspense } from 'react'
 import { AuthContext } from '@/app/context/authContext';
 import Loading from '@/app/ui/Loading';
 import { redirect, useRouter } from 'next/navigation';
@@ -11,9 +11,12 @@ import toast from 'react-hot-toast';
 import Script from 'next/script';
 import axios from 'axios';
 import NotLoggedIn from '@/app/ui/NotLoggedIn';
+import { useSearchParams } from 'next/navigation';
 
 const Page = () => {
   let content;
+  const searchParams = useSearchParams();
+  const cartId = searchParams.get('cart')
   const { token, isAuthenticated } = useContext(AuthContext);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
@@ -47,10 +50,10 @@ const Page = () => {
             headers
           })
           toast.success("Payment Successful")
-          router.push('/orders')
+          router.replace('/orders')
         } catch (error) {
           toast.error("Payment Failed")
-        } finally{
+        } finally {
           setIsRedirecting(false)
         }
       }
@@ -62,14 +65,14 @@ const Page = () => {
 
   if (!isAuthenticated || token === null || token === ' ') {
     if (isAuthenticated !== null && token !== ' ')
-      content = <NotLoggedIn/>
+      content = <NotLoggedIn />
     else
       content = <Loading />
   }
   else {
     content = <>{
       !isRedirecting ?
-        <Checkout token={token} handlePayment={handlePayment} />
+          <Checkout token={token} cartId={cartId} handlePayment={handlePayment} />
         : <Loading />
     }
       <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
@@ -78,9 +81,10 @@ const Page = () => {
   return content;
 }
 
-const Checkout = ({ token, handlePayment }: { token: string, handlePayment: (order: string) => Promise<void> }) => {
+const Checkout = ({ token, cartId, handlePayment }: { token: string, cartId: string | null, handlePayment: (order: string) => Promise<void> }) => {
   let content;
-  const initialState = { success: false, message: "", data: { token, order: " " } };
+  console.log(cartId)
+  const initialState = { success: false, message: "", data: { token, order: " ", cart: cartId } };
   const [isLoading, setIsLoading] = useState(true);
   const [cartData, setCartData] = useState<cartResponseType | null>(null);
   const [response, orderAction] = useFormState(createOrder, initialState);
@@ -99,21 +103,25 @@ const Checkout = ({ token, handlePayment }: { token: string, handlePayment: (ord
       const headers = {
         Authorization: `Bearer ${token}`
       }
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart`, {
-        headers,
-        cache: 'no-store'
-      })
+      let response;
+      if (cartId)
+        response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart/${cartId}`, {
+          headers,
+          cache: 'no-store'
+        });
+      else
+        response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart`, {
+          headers,
+          cache: 'no-store'
+        })
       const cart: cartResponseType = await response.json();
       setCartData(cart);
       setIsLoading(false);
     })()
-  }, [token])
+  }, [token, cartId])
 
   if (isLoading || !cartData)
     content = <Loading />
-
-  else if (!cartData.success || !cartData.data.length || !cartData.data[0].cartItems.length)
-    redirect(`/cart`)
 
   else {
     content =
@@ -168,6 +176,10 @@ const Checkout = ({ token, handlePayment }: { token: string, handlePayment: (ord
 
 const CartTotal = ({ cartData }: { cartData: cartResponseType }) => {
   const data = useFormStatus();
+  const router = useRouter();
+  if(!cartData || !cartData.subTotal)
+    router.push('/cart')
+
   return (
     <div className='md:shadow-2xl rounded-md bg-white h-fit md:w-1/4 min-w-fit md:ml-4 p-10 md:p-5 md:pt-12 md:sticky md:z-1000 md:top-10'>
       <div className='flex flex-wrap justify-between h-8'>
