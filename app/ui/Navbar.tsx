@@ -10,7 +10,7 @@ import Image from "next/image";
 import profile from "../../public/profile.jpg";
 import Logo from "../../public/logo(2).png";
 import SidebarLinks from "./Navbar/SidebarLinks";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {v4 as uuid} from 'uuid';
 
 type SearchParams = {
@@ -19,6 +19,7 @@ type SearchParams = {
 
 const Navbar = () => {
   const [sidebar, setSidebar] = useState<Boolean>(false);
+  const pathname = usePathname();
   const category = [
     {
       id: 1,
@@ -102,9 +103,9 @@ const Navbar = () => {
           <div className="bg-gray-200 p-6 pl-5">
             <Image src={profile} width={50} height={50} alt="profile" className="rounded-full h-auto w-auto" />
             <br />
-            <Link href="/login">Sign In</Link>
+            <Link href={`/login?redirectTo=${pathname}`}>Sign In</Link>
             &nbsp;|&nbsp;
-            <Link href="/register">Register</Link>
+            <Link href={`/register?redirectTo=${pathname}`}>Register</Link>
           </div>
           <SidebarLinks />
         </div>

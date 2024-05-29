@@ -9,21 +9,23 @@ import { handleRegister } from '@/app/lib/auth'
 import { FaPencilAlt } from "react-icons/fa";
 import Link from 'next/link'
 import profile from '@/app/assets/profile.jpg'
-import { redirect } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 
 const Register = () => {
   const initialState = { message: "", accessToken: "", roles: "" };
 
   const [avatar, setAvatar] = useState("");
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirectTo') || '/';
   const { loginState } = useContext(AuthContext);
   const [response, registerAction] = useFormState(handleRegister, initialState)
 
   useEffect(() => {
     if (response.message === "Success") {
       loginState(response.accessToken, response.roles);
-      redirect('/')
+      redirect(redirectTo)
     }
-  }, [response, loginState]);
+  }, [response, redirectTo, loginState]);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
@@ -78,7 +80,7 @@ const Register = () => {
         />
 
         <Button>SIGNUP</Button>
-        <p className='mt-4'>Already have an account? <Link className='text-blue-500 underline' href="/login">Login</Link></p>
+        <p className='mt-4'>Already have an account? <Link className='text-blue-500 underline' href={`/login?redirectTo=${redirectTo}`}>Login</Link></p>
         {response.message && response.message !== "Success" && (
           <div className='flex items-center mt-2'>
             <BsExclamationCircle className="text-red-500 mr-1" />

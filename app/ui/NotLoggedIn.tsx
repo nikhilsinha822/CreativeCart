@@ -1,14 +1,18 @@
 'use client'
 import React from 'react'
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const NotLoggedIn = () => {
     const router = useRouter();
+    const pathname = usePathname();
     return (
         <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
-            {/* <Image className='mx-auto' src={image} width={300} height={300} alt={"cartEmpty"} /> */}
-            <h1 className='text-xl'>Please login!</h1>
-            <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/login')}>Login</button>
+            <h1 className='text-xl m-4'>Whoops! Looks like you&#39;re not logged in.</h1>
+            <button
+                className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto'
+                onClick={() => router.replace(`/login?redirectTo=${pathname}`)}>
+                Login
+            </button>
         </div>
     )
 }

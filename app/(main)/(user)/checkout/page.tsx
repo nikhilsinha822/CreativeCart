@@ -10,6 +10,7 @@ import { BsExclamationCircle } from 'react-icons/bs'
 import toast from 'react-hot-toast';
 import Script from 'next/script';
 import axios from 'axios';
+import NotLoggedIn from '@/app/ui/NotLoggedIn';
 
 const Page = () => {
   let content;
@@ -61,7 +62,7 @@ const Page = () => {
 
   if (!isAuthenticated || token === null || token === ' ') {
     if (isAuthenticated !== null && token !== ' ')
-      redirect('/login')
+      content = <NotLoggedIn/>
     else
       content = <Loading />
   }

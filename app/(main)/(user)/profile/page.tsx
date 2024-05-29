@@ -8,6 +8,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import Address from '@/app/ui/Profile/Address';
 import Sidebar from '@/app/ui/Profile/Sidebar';
 import Profile from '@/app/ui/Profile/Profile';
+import NotLoggedIn from '@/app/ui/NotLoggedIn';
 
 const Page = () => {
     let content;
@@ -16,12 +17,7 @@ const Page = () => {
 
     if (!isAuthenticated || token === null || token === ' ') {
         if (isAuthenticated !== null && token !== ' ') {
-            content = <>
-                <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
-                    <h1 className='text-xl'>Please login to view your profile!</h1>
-                    <button className='bg-blue-600 text-white p-2 px-5 text-base my-2 rounded-md mx-auto' onClick={() => router.push('/login')}>Login</button>
-                </div>
-            </>
+            content = <NotLoggedIn/>
         }
         else {
             content = <Loading />

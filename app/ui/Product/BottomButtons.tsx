@@ -5,11 +5,12 @@ import { useContext } from 'react'
 import { AuthContext } from '@/app/context/authContext'
 import axios, { AxiosResponse } from 'axios'
 import toast from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Loader2 from '../Loader2'
 
 const BottomButtons = ({ product }: { product: string }) => {
   const { token, isAuthenticated } = useContext(AuthContext);
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
   const addToCart = async () => {
@@ -39,7 +40,7 @@ const BottomButtons = ({ product }: { product: string }) => {
           }, { headers })
         }
       } else {
-        if (isAuthenticated !== null) router.push('/login')
+        if (isAuthenticated !== null) router.replace(`/login?redirectTo=${pathname}`)
         console.log("This was unexpected. Something is Really wrong. Try again later.");
       }
     } catch (error: any) {

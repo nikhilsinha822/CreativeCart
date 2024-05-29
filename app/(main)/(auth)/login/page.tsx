@@ -3,24 +3,27 @@ import React, { useContext, useEffect } from 'react'
 import { useFormState } from 'react-dom'
 import { handleLogin } from '@/app/lib/auth'
 import { AuthContext } from '@/app/context/authContext'
-import { redirect } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 import { BsExclamationCircle } from "react-icons/bs";
 import Link from 'next/link'
 import Button from '@/app/ui/Button'
 import Image from 'next/image'
 
 const Login = () => {
-    const initialState = { message: "", accessToken: "", roles:[] };
+    const initialState = { message: "", accessToken: "", roles: [] };
 
-    const { loginState } = useContext(AuthContext)
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get('redirectTo') || '/';
+    console.log(redirectTo, searchParams);
+    const { loginState } = useContext(AuthContext);
     const [response, loginAction] = useFormState(handleLogin, initialState);
 
     useEffect(() => {
         if (response.message === "Success") {
             loginState(response.accessToken, response.roles);
-            redirect('/')
+            redirect(redirectTo)
         }
-    }, [response, loginState])
+    }, [response, redirectTo, loginState])
 
     return (
         <div className='flex justify-center md:mx-20 py-auto h-screen'>
@@ -46,7 +49,7 @@ const Login = () => {
                         className='border border-gray-500 p-3 rounded focus:outline-none focus:ring-1 focus:ring-black'
                     />
                     <Button>LOGIN</Button>
-                    <p className='mt-4'>Don&apos;t have an account? <Link className='text-blue-500 underline' href="/register">Register</Link></p>
+                    <p className='mt-4'>Don&apos;t have an account? <Link className='text-blue-500 underline' href={`/register?redirectTo=${redirectTo}`}>Register</Link></p>
                     {response.message && response.message !== "Success" && (
                         <div className='flex items-center mt-2'>
                             <BsExclamationCircle className="text-red-500 mr-1" />

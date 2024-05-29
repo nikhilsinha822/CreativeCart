@@ -15,6 +15,7 @@ import { prepareCart } from '@/app/lib/data'
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { v4 as uuid } from 'uuid'
+import NotLoggedIn from '@/app/ui/NotLoggedIn'
 
 type cartPropsType = {
     item: cartItemStateType,
@@ -26,16 +27,10 @@ type cartPropsType = {
 
 const Cart = () => {
     let content;
-    const router = useRouter();
     const { token, isAuthenticated } = useContext(AuthContext);
     if (!isAuthenticated || token === null || token === ' ') {
         if (isAuthenticated !== null && token !== ' ') {
-            content = <>
-                <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
-                    <h1 className='text-xl'>Please login to view your cart!</h1>
-                    <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/login')}>Login</button>
-                </div>
-            </>
+            content = <NotLoggedIn />
         }
         else {
             content = <Loading />
@@ -47,9 +42,8 @@ const Cart = () => {
                 <CartList token={token} />
             </Suspense>
         </div>
-
-        return content;
     }
+    return content;
 }
 const CartList = ({ token }: { token: string }) => {
     let content;

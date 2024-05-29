@@ -11,6 +11,7 @@ import { productType } from '@/app/lib/definations'
 import Loading from '@/app/ui/Loading'
 import toast from 'react-hot-toast'
 import { useParams, redirect } from 'next/navigation'
+import NotLoggedIn from '@/app/ui/NotLoggedIn'
 
 const Page = () => {
   const [product, setProduct] = useState<null | productType>(null);
@@ -74,12 +75,7 @@ const EditProducts = ({ product }: { product: productType }) => {
 
   if (!isAuthenticated || token === null || token === ' ') {
     if (isAuthenticated !== null && token !== ' ') {
-      content = <>
-        <div className='h-screen w-full flex flex-col align-center text-center justify-center'>
-          <h1 className='text-xl'>Please login!</h1>
-          <button className='bg-blue-600 text-white p-2 px-5 text-lg my-2 rounded-md mx-auto' onClick={() => router.push('/login')}>Login</button>
-        </div>
-      </>
+      content = <NotLoggedIn />
     }
     else {
       content = <Loading />
