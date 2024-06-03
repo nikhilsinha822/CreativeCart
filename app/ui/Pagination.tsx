@@ -24,7 +24,7 @@ const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
     return (
         <div className='flex items-center justify-center my-10 transition-transform'>
             {
-                totalPages > 5 && <>
+                totalPages > 1 && <>
                     <Link
                         href={createPageURL(Number(currentPage) - 1)}
                         className='p-2 hover:border-r-white bg-white text-blue-500 flex items-center rounded-l-md w-30 border-white border-2 hover:border-blue-500 hover:text-white hover:bg-blue-500'>
@@ -73,7 +73,7 @@ const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
                 }
             </div>
             {
-                totalPages > 5 &&
+                totalPages > 1 &&
                 <>
 
                     <Link

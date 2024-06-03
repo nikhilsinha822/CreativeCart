@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { FaBoxesPacking } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { IoSettingsSharp } from "react-icons/io5";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 const Sidebar = ({ user }: { user: userResponseType }) => {
     const { logoutState } = useContext(AuthContext);
@@ -37,9 +38,15 @@ const Sidebar = ({ user }: { user: userResponseType }) => {
                 <Link href={'/orders'}>My Orders</Link>
             </div>
             <div className='border flex flex-col'>
-                <h1 className='p-3 flex items-center'><IoSettingsSharp className='mx-2' />Account Setting</h1>
+                <h1 className='p-3 flex font-semibold items-center'><IoSettingsSharp className='mx-2' />Account Settings</h1>
                 <Link className='p-3 pl-12' href={'/profile?link=personal'}>Profile</Link>
                 <Link className='p-3 pl-12' href={'/profile?link=address'}>Address</Link>
+            </div>
+            <div className='border flex flex-col'>
+                <h1 className='p-3 flex font-semibold items-center'><MdAdminPanelSettings className='mx-2' />Admin Settings</h1>
+                <Link className='p-3 pl-12' href={'/admin/product/new'}>Add Product</Link>
+                <Link className='p-3 pl-12' href={'/admin/product'}>Manage Products</Link>
+                <Link className='p-3 pl-12' href={'/admin/users'}>Manage Users</Link>
             </div>
             <button onClick={handleLogOut} className='p-3 border flex items-center w-full'><RiLogoutBoxLine className='mx-2' />Logout</button>
         </div>
