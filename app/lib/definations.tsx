@@ -95,13 +95,14 @@ export type shippingInfoType = {
 }
 
 export type userResponseType = {
+    _id: string,
     name: string,
     email: string,
     avatar: {
         url: string
         public_id: string
     },
-    role: string[],
+    roles: string[],
     shippingInfo: shippingInfoType[]
 }
 
