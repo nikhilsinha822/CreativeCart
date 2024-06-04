@@ -122,9 +122,10 @@ const AdminProductList = ({ token }: { token: string }) => {
                 data: updateProduct
             }
             setProducts(productUpdateResponse)
-            revalidateTag(`products ${id}`)
+            // revalidateTag(`products ${id}`)
             toast.success("Successfully Deleted")
         } catch (err: any) {
+            console.log(err)
             toast.error("There was some problem deleting that product")
         }
     };
