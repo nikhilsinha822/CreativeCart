@@ -40,9 +40,9 @@ const Profile = ({ user, token }: { user: userResponseType, token: string }) => 
         }
     }, [response, user]);
 
-    return <div className='m-5 ml-0 bg-white w-full text-base'>
+    return <div className='m-5 ml-0 p-5 md:p-10 bg-white w-full text-base'>
         <form action={profileAction}>
-            <div className='flex flex-col md:flex-row justify-between m-14 mr-0 mb-0'>
+            <div className='flex flex-col md:flex-row justify-between md:mb-14 mr-0 mb-0'>
 
                 <div className='flex flex-col order-2 md:order-1'>
                     <label className='font-bold my-5' htmlFor="name">Full Name</label>
@@ -51,7 +51,7 @@ const Profile = ({ user, token }: { user: userResponseType, token: string }) => 
                     <input className='border p-4 py-2' name="email" type="text" defaultValue={userState.email} />
                 </div>
 
-                <div className='flex flex-col justify-center items-center my-1 order-1 md:order-2'>
+                <div className='flex flex-col justify-center items-center order-1 md:order-2'>
                     <Image className='rounded-full aspect-square w-28 md:w-3/4' src={avatar} width={200} height={200} alt={user.name} />
                     <label htmlFor='avatar' className='flex justify-center items-center w-auto border-2 px-4 py-2 my-2 focus:ring-1 focus:ring-black hover:cursor-pointer hover:text-blue-400'>
                         Edit Profile &nbsp;&nbsp;
@@ -70,11 +70,11 @@ const Profile = ({ user, token }: { user: userResponseType, token: string }) => 
             </div>
 
             <div className='flex justify-between items-center'>
-                <div className='m-auto md:m-14'>
+                <div className=''>
                     <button type='button' className='border border-black p-2 px-5 text-base mt-8'
                         onClick={handlePasswordReset}>Reset Password</button>
                 </div>
-                <div className='m-auto md:m-6'>
+                <div className=''>
                     <Button>Update Profile</Button>
                 </div>
             </div>

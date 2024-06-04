@@ -42,12 +42,15 @@ const Sidebar = ({ user }: { user: userResponseType }) => {
                 <Link className='p-3 pl-12' href={'/profile?link=personal'}>Profile</Link>
                 <Link className='p-3 pl-12' href={'/profile?link=address'}>Address</Link>
             </div>
-            <div className='border flex flex-col'>
-                <h1 className='p-3 flex font-semibold items-center'><MdAdminPanelSettings className='mx-2' />Admin Settings</h1>
-                <Link className='p-3 pl-12' href={'/admin/product/new'}>Add Product</Link>
-                <Link className='p-3 pl-12' href={'/admin/product'}>Manage Products</Link>
-                <Link className='p-3 pl-12' href={'/admin/users'}>Manage Users</Link>
-            </div>
+            {
+                user.roles.includes('Admin') &&
+                <div className='border flex flex-col'>
+                    <h1 className='p-3 flex font-semibold items-center'><MdAdminPanelSettings className='mx-2' />Admin Settings</h1>
+                    <Link className='p-3 pl-12' href={'/admin/product/new'}>Add Product</Link>
+                    <Link className='p-3 pl-12' href={'/admin/product'}>Manage Products</Link>
+                    <Link className='p-3 pl-12' href={'/admin/users'}>Manage Users</Link>
+                </div>
+            }
             <button onClick={handleLogOut} className='p-3 border flex items-center w-full'><RiLogoutBoxLine className='mx-2' />Logout</button>
         </div>
     </div>
